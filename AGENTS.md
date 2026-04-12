@@ -33,45 +33,69 @@ Dashboard table with per-market signals
 
 | File | Purpose | Status |
 |---|---|---|
-| `app.py` | Streamlit dashboard — runs simulations across all markets, shows signal table, drill-down per market with agent chart + table | Active |
-| `simulation.py` | Core engine — persona templates, keyword/phrase scoring, topic inference, `simulate_market()`, `simulate_all()`, trade signal classification | Active |
-| `utils.py` | Persistence layer — JSON load/save, session state management, CRUD helpers for markets/news/edges, lookup utilities | Active |
-| `data/state.json` | Persistent storage for markets, news events, and dependency edges | Active |
-| `pages/1_Markets.py` | Streamlit page — add/view/remove prediction markets | Active |
-| `pages/2_News.py` | Streamlit page — add/view/remove news events | Active |
-| `pages/3_Dependencies.py` | Streamlit page — interactive dependency graph (streamlit-agraph), add/remove edges between news↔markets and markets↔markets | Active |
+| `app.py` | Streamlit dashboard — runs `simulate_all()` across all markets, shows signal overview table with colored BUY/SELL/HOLD, metric summary counts, drill-down per market with linked news, agent bar chart + detail table | Active |
+| `simulation.py` | Core engine — persona templates, keyword/phrase scoring (`score_event_text`), topic inference (`infer_topics`), composite multi-news scoring (`_composite_event_score`), per-market simulation (`simulate_market`), batch simulation (`simulate_all`), legacy single-event simulation (`generate_agents`), trade signal classification (`classify_trade_signal`) | Active |
+| `utils.py` | Persistence layer — `load_state`/`save_state`/`get_state`/`persist` for JSON I/O, `slugify` for ID generation, lookup helpers (`find_market`, `find_news`, `edges_targeting`, `edges_from`, `news_edges_for_market`, `market_edges_for_market`), CRUD helpers (`add_market`, `remove_market`, `add_news`, `remove_news`, `add_edge`, `remove_edge`), shared `CATEGORIES` list | Active |
+| `data/state.json` | Persistent storage — 14 seed markets, 5 seed news events, 37 dependency edges (30 market→market from original `PRESET_EVENTS`, 7 news→market) | Active |
+| `pages/1_Markets.py` | Streamlit page — expandable form to add markets (name, description, category, probability), dataframe listing all markets, expandable section to remove a market (cascades to delete its edges) | Active |
+| `pages/2_News.py` | Streamlit page — expandable form to add news (headline, category, date), dataframe listing all news, expandable section to remove a news event (cascades to delete its edges) | Active |
+| `pages/3_Dependencies.py` | Streamlit page — interactive directed graph via `streamlit-agraph` (circles = markets, squares = news, green/red edges for +/− influence, width ∝ strength), form to add edges (source news/market → target market, direction, strength, reason), section to remove edges | Active |
 | `model.py` | Placeholder for ML / LLM probability model | Empty — extend here |
-| `requirements.txt` | Python deps: `streamlit`, `pandas`, `streamlit-agraph` | Active |
+| `requirements.txt` | Python deps: `streamlit >=1.44,<2`, `pandas >=2.2,<3`, `streamlit-agraph >=0.0.45` | Active |
 
-## Key Concepts
-
-### Data Model
+## Data Model
 
 Three entity types persisted in `data/state.json`:
 
-- **Market** — a tradeable prediction contract with `id`, `name`, `description`, `category`, `market_probability`
-- **News Event** — a real-world headline with `id`, `headline`, `category`, `timestamp`
-- **Dependency Edge** — a directed relationship: `source_id` → `target_id` with `source_type` (news|market), `direction` (+1|-1), `strength` (0–1), `reason`
+```
+Market
+  id                  str         slug, max 64 chars
+  name                str         human-readable market name
+  description         str         full contract description
+  category            str         macro | markets | crypto | culture | policy | company
+  market_probability  float       0–1, the current market-implied probability
+
+News Event
+  id                  str         slug, max 64 chars
+  headline            str         the real-world headline text
+  category            str         same category set as markets
+  timestamp           str         ISO date (YYYY-MM-DD)
+
+Dependency Edge
+  source_id           str         news ID or market ID
+  source_type         str         "news" | "market"
+  target_id           str         always a market ID
+  direction           int         +1 (increases target probability) or −1 (decreases)
+  strength            float       0.0–1.0, how strong the influence is
+  reason              str         human-readable explanation
+```
+
+## Key Concepts
 
 ### Persona Templates (`simulation.py`)
-Ten archetypes (Optimist, Pessimist, Macro Trader, Economist, Retail Investor, Momentum Chaser, Contrarian, Policy Wonk, Crypto Degenerate, Entertainment Fan). Each has:
-- **base_bias** — intrinsic bullish/bearish lean
-- **volatility** — scales the noise term
-- **topic_tilts** — dict mapping topic → sentiment modifier
+Ten archetypes: Optimist, Pessimist, Macro Trader, Economist, Retail Investor, Momentum Chaser, Contrarian, Policy Wonk, Crypto Degenerate, Entertainment Fan. Each has:
+- **base_bias** — intrinsic bullish/bearish lean (e.g. Optimist +0.12, Pessimist −0.12)
+- **volatility** — scales the noise term (0.08–0.16)
+- **topic_tilts** — dict mapping topic → sentiment modifier (e.g. Crypto Degenerate gets +0.18 on "crypto")
 
-### Event Scoring
-Two-tier keyword lookup:
-1. **Phrase match** (`POSITIVE_PHRASES` / `NEGATIVE_PHRASES`) — multi-word patterns
-2. **Token match** (`TOKEN_WEIGHTS`) — single tokens
+Agents are selected round-robin from templates, shuffled per seed, up to the configured `agent_count` (5–20).
 
-Output is clamped to [-0.35, 0.35].
+### Event Scoring (`score_event_text`)
+Two-tier keyword lookup on headline text:
+1. **Phrase match** — `POSITIVE_PHRASES` (10 phrases, e.g. "rate cut" → +0.18) and `NEGATIVE_PHRASES` (10 phrases, e.g. "misses earnings" → −0.25)
+2. **Token match** — `TOKEN_WEIGHTS` (30 tokens, e.g. "bullish" → +0.14, "recession" → −0.20)
 
-### Composite Scoring (Multi-News)
-For a given market, the composite event score aggregates all linked news:
+Falls back to +0.02 "neutral headline baseline" when nothing matches. Output clamped to [−0.35, 0.35].
+
+### Topic Inference (`infer_topics`)
+Six topic buckets (`TOPIC_KEYWORDS`): macro, markets, crypto, culture, policy, company. Determined by token overlap with curated keyword sets. Falls back to `["markets"]` when nothing matches.
+
+### Composite Scoring (`_composite_event_score`)
+For a given market, aggregates all linked news headlines weighted by their edge:
 ```
 composite_score = Σ (score_event_text(headline) × edge.direction × edge.strength)
 ```
-Clamped to [-0.35, 0.35].
+Clamped to [−0.35, 0.35]. Topics are the union of all linked headlines' inferred topics.
 
 ### Agent Sentiment Calculation
 ```
@@ -88,12 +112,15 @@ edge = model_probability − market_probability
 signal = BUY if edge ≥ threshold else SELL if edge ≤ −threshold else HOLD
 ```
 
-### Dependency Graph
-Interactive visualization using `streamlit-agraph`:
-- Market nodes = circles, colored by category
-- News nodes = squares, colored by category
-- Green edges = positive influence, red = negative
-- Edge width proportional to strength
+### Dependency Graph Visualization
+Interactive directed graph rendered by `streamlit-agraph` on the Dependencies page. Category colors:
+- macro = blue (#3b82f6), markets = indigo (#6366f1), crypto = amber (#f59e0b)
+- culture = pink (#ec4899), policy = emerald (#10b981), company = violet (#8b5cf6)
+
+Market nodes are circles (size 25), news nodes are squares (size 18). Edge color: green (#22c55e) for positive, red (#ef4444) for negative. Edge width = `1 + strength × 3`.
+
+### Persistence
+All state lives in `data/state.json`, loaded into `st.session_state["app_state"]` on first access via `get_state()`. Mutations go through CRUD helpers in `utils.py` and are flushed to disk via `persist()`. Removing a market or news event cascades to delete all associated edges.
 
 ## Running
 
@@ -102,20 +129,24 @@ pip install -r requirements.txt
 streamlit run app.py
 ```
 
-Pages:
-- **Dashboard** (app.py) — run simulations, view signal table, drill into individual markets
-- **Markets** — add/remove prediction markets
-- **News** — add/remove news events
-- **Dependencies** — visualize and manage the dependency graph
+### Pages
+- **Dashboard** (`app.py`) — configure agent count / randomness / seed / threshold in sidebar, run simulations, view signal table, drill into individual markets
+- **Markets** (`pages/1_Markets.py`) — add/remove prediction markets with name, description, category, probability
+- **News** (`pages/2_News.py`) — add/remove news events with headline, category, date
+- **Dependencies** (`pages/3_Dependencies.py`) — interactive graph visualization, add/remove edges between news↔markets and markets↔markets
+
+### Seed Data
+Ships with 14 prediction markets across 6 categories (macro, markets, crypto, company, policy, culture), 5 sample news events, and 37 dependency edges (30 market→market, 7 news→market). Reset by restoring `data/state.json` from version control.
 
 ## Planned Extensions
 
 - **LLM-powered agent reactions** — replace keyword scoring with LLM calls so agents produce richer, context-aware sentiment (use `model.py`)
 - **Live market feed** — pull real-time Kalshi prices instead of mocked market probability
 - **Agent memory & network effects** — let agents remember past events and influence each other across rounds
-- **Event chains** — model cascading events (e.g. rate cut → equity rally → crypto surge)
+- **Event chains** — model cascading events via the dependency graph (e.g. rate cut → equity rally → crypto surge)
 - **News ingestion** — auto-fetch headlines from RSS / APIs and run the simulation continuously
 - **GPU-accelerated model** — when training ML models for probability estimation, use GPU
+- **Market→market simulation propagation** — use market→market edges to propagate probability shifts across the graph
 
 ## Conventions
 
@@ -124,4 +155,6 @@ Pages:
 - All randomness flows through a seeded `random.Random` instance for reproducibility
 - Probabilities are floats in [0, 1]; the UI converts to/from percentages at the boundary
 - Data persisted as JSON in `data/state.json`, loaded into `st.session_state` at startup
+- IDs are slugified from names (lowercase, alphanumeric + hyphens, max 64 chars)
+- Removing an entity cascades to remove all edges referencing it
 - No external API calls yet — everything is self-contained and deterministic given a seed
