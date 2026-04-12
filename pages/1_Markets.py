@@ -1,10 +1,18 @@
 from __future__ import annotations
 
+import os
+
+from dotenv import load_dotenv
+
+load_dotenv()
+
 import pandas as pd
 import streamlit as st
 
+from edge_analysis import generate_market_edges
 from utils import (
     CATEGORIES,
+    add_edge,
     add_market,
     get_state,
     persist,
@@ -42,15 +50,40 @@ with st.expander("Add new market", expanded=False):
             if any(m["id"] == market_id for m in state["markets"]):
                 st.error(f"A market with id **{market_id}** already exists.")
             else:
-                add_market(state, {
+                market_obj = {
                     "id": market_id,
                     "name": name.strip(),
                     "description": description.strip() or name.strip(),
                     "category": category,
                     "market_probability": probability_pct / 100,
-                })
+                }
+                add_market(state, market_obj)
                 persist()
                 st.success(f"Added market: **{name.strip()}**")
+
+                if os.environ.get("OPENAI_API_KEY") and len(state["markets"]) >= 2:
+                    try:
+                        with st.spinner("Analyzing market relationships with AI..."):
+                            edges = generate_market_edges(market_obj, state["markets"])
+                        for edge in edges:
+                            existing = any(
+                                e["source_id"] == edge["source_id"]
+                                and e["target_id"] == edge["target_id"]
+                                for e in state["edges"]
+                            )
+                            if not existing:
+                                add_edge(state, edge)
+                        persist()
+                        if edges:
+                            st.success(
+                                f"AI generated {len(edges)} market→market "
+                                f"edge{'s' if len(edges) != 1 else ''}."
+                            )
+                        else:
+                            st.info("AI found no causal links to other markets.")
+                    except Exception as exc:
+                        st.warning(f"AI edge generation failed: {exc}")
+
                 st.rerun()
 
 # ── Market list ──────────────────────────────────────────────────────────

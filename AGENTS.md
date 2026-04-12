@@ -37,11 +37,11 @@ Dashboard table with per-market signals
 | `simulation.py` | Core engine — persona templates, keyword/phrase scoring (`score_event_text`), topic inference (`infer_topics`), composite multi-news scoring (`_composite_event_score`), per-market simulation (`simulate_market`), batch simulation (`simulate_all`), legacy single-event simulation (`generate_agents`), trade signal classification (`classify_trade_signal`) | Active |
 | `utils.py` | Persistence layer — `load_state`/`save_state`/`get_state`/`persist` for JSON I/O, `slugify` for ID generation, lookup helpers (`find_market`, `find_news`, `edges_targeting`, `edges_from`, `news_edges_for_market`, `market_edges_for_market`), CRUD helpers (`add_market`, `remove_market`, `add_news`, `remove_news`, `add_edge`, `remove_edge`), shared `CATEGORIES` list | Active |
 | `data/state.json` | Persistent storage — 14 seed markets, 5 seed news events, 37 dependency edges (30 market→market from original `PRESET_EVENTS`, 7 news→market) | Active |
-| `pages/1_Markets.py` | Streamlit page — expandable form to add markets (name, description, category, probability), dataframe listing all markets, expandable section to remove a market (cascades to delete its edges) | Active |
-| `pages/2_News.py` | Streamlit page — expandable form to add news (headline, category, date), dataframe listing all news, expandable section to remove a news event (cascades to delete its edges) | Active |
-| `pages/3_Dependencies.py` | Streamlit page — interactive directed graph via `streamlit-agraph` (circles = markets, squares = news, green/red edges for +/− influence, width ∝ strength), form to add edges (source news/market → target market, direction, strength, reason), section to remove edges | Active |
-| `model.py` | Placeholder for ML / LLM probability model | Empty — extend here |
-| `requirements.txt` | Python deps: `streamlit >=1.44,<2`, `pandas >=2.2,<3`, `streamlit-agraph >=0.0.45` | Active |
+| `pages/1_Markets.py` | Streamlit page — expandable form to add markets (name, description, category, probability), auto-generates market→market edges via AI on add, dataframe listing all markets, expandable section to remove a market (cascades to delete its edges) | Active |
+| `pages/2_News.py` | Streamlit page — expandable form to add news (headline, category, date), auto-generates news→market edges via AI on add, dataframe listing all news, expandable section to remove a news event (cascades to delete its edges) | Active |
+| `pages/3_Dependencies.py` | Streamlit page — interactive directed graph via `streamlit-agraph`, AI bulk regeneration buttons for news→market and market→market edges (GPT-4o-mini), manual form to add/remove edges | Active |
+| `edge_analysis.py` | AI edge generation — `generate_news_edges` (news→market), `generate_market_edges` (market→market), `generate_all_news_edges`, `generate_all_market_edges`; calls GPT-4o-mini with JSON structured output, validates target IDs, clamps strength/direction | Active |
+| `requirements.txt` | Python deps: `streamlit >=1.44,<2`, `pandas >=2.2,<3`, `streamlit-agraph >=0.0.45`, `openai >=1.0,<2`, `python-dotenv >=1.0,<2` | Active |
 
 ## Data Model
 

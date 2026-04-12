@@ -1,5 +1,11 @@
 from __future__ import annotations
 
+import os
+
+from dotenv import load_dotenv
+
+load_dotenv()
+
 import streamlit as st
 
 try:
@@ -8,6 +14,7 @@ except ImportError:
     agraph = None
     Config = Edge = Node = None
 
+from edge_analysis import generate_market_edges, generate_news_edges
 from utils import (
     add_edge,
     find_market,
@@ -107,6 +114,115 @@ else:
         agraph(nodes=nodes, edges=edges_vis, config=config)
     else:
         st.info("Add some markets and news first to see the graph.")
+
+# ── AI edge generation ────────────────────────────────────────────────────
+
+st.divider()
+st.subheader("AI Edge Generation")
+
+has_key = bool(os.environ.get("OPENAI_API_KEY"))
+has_markets = bool(state["markets"])
+
+if not has_key:
+    st.error("Set `OPENAI_API_KEY` in your `.env` file to enable AI edge generation.")
+elif not has_markets:
+    st.info("Add at least one market to use AI generation.")
+else:
+    current_news_edges = [e for e in state["edges"] if e["source_type"] == "news"]
+    current_market_edges = [e for e in state["edges"] if e["source_type"] == "market"]
+
+    col_news_btn, col_mkt_btn = st.columns(2)
+
+    # ── News → Market ────────────────────────────────────────────────
+    with col_news_btn:
+        news_count = len(state["news"])
+        st.markdown(
+            f"**News → Market** edges  \n"
+            f"{news_count} headline(s), {len(current_news_edges)} existing edge(s)"
+        )
+        news_disabled = news_count == 0
+        regen_news = st.button(
+            "Regenerate news edges",
+            type="primary",
+            use_container_width=True,
+            disabled=news_disabled,
+            help="No news events to analyze" if news_disabled else None,
+        )
+
+    # ── Market → Market ──────────────────────────────────────────────
+    with col_mkt_btn:
+        market_count = len(state["markets"])
+        st.markdown(
+            f"**Market → Market** edges  \n"
+            f"{market_count} market(s), {len(current_market_edges)} existing edge(s)"
+        )
+        mkt_disabled = market_count < 2
+        regen_markets = st.button(
+            "Regenerate market edges",
+            type="primary",
+            use_container_width=True,
+            disabled=mkt_disabled,
+            help="Need at least 2 markets" if mkt_disabled else None,
+        )
+
+    if regen_news:
+        state["edges"] = [e for e in state["edges"] if e["source_type"] != "news"]
+        progress = st.progress(0, text="Generating news edges...")
+        total = 0
+        for i, news in enumerate(state["news"]):
+            progress.progress(
+                (i + 1) / news_count,
+                text=f"Analyzing: {news['headline'][:60]}...",
+            )
+            try:
+                edges = generate_news_edges(news, state["markets"])
+                for edge in edges:
+                    existing = any(
+                        e["source_id"] == edge["source_id"]
+                        and e["target_id"] == edge["target_id"]
+                        for e in state["edges"]
+                    )
+                    if not existing:
+                        add_edge(state, edge)
+                        total += 1
+            except Exception as exc:
+                st.warning(f"Failed for \"{news['headline'][:40]}...\": {exc}")
+        persist()
+        progress.empty()
+        st.success(f"Generated **{total}** news→market edge(s).")
+        st.rerun()
+
+    if regen_markets:
+        state["edges"] = [e for e in state["edges"] if e["source_type"] != "market"]
+        progress = st.progress(0, text="Generating market edges...")
+        total = 0
+        seen: set[tuple[str, str]] = set()
+        for i, market in enumerate(state["markets"]):
+            progress.progress(
+                (i + 1) / market_count,
+                text=f"Analyzing: {market['name'][:60]}...",
+            )
+            try:
+                edges = generate_market_edges(market, state["markets"])
+                for edge in edges:
+                    pair = (edge["source_id"], edge["target_id"])
+                    if pair in seen:
+                        continue
+                    seen.add(pair)
+                    existing = any(
+                        e["source_id"] == edge["source_id"]
+                        and e["target_id"] == edge["target_id"]
+                        for e in state["edges"]
+                    )
+                    if not existing:
+                        add_edge(state, edge)
+                        total += 1
+            except Exception as exc:
+                st.warning(f"Failed for \"{market['name'][:40]}...\": {exc}")
+        persist()
+        progress.empty()
+        st.success(f"Generated **{total}** market→market edge(s).")
+        st.rerun()
 
 # ── Add edge form ────────────────────────────────────────────────────────
 
