@@ -1,9 +1,12 @@
 from __future__ import annotations
 
 from dataclasses import dataclass
+import os
 import random
 import re
 from typing import Iterable
+
+import requests
 
 
 POSITIVE_PHRASES = {
@@ -211,6 +214,60 @@ def score_event_text(text: str) -> tuple[float, list[str]]:
     return clamp(score, -0.35, 0.35), signals
 
 
+def get_event_score_llm(event: str, api_key: str | None = None) -> float:
+    api_key = api_key or os.getenv("OPENAI_API_KEY")
+    if not api_key or not event.strip():
+        return 0.02
+
+    payload = {
+        "model": "gpt-4o-mini",
+        "temperature": 0.2,
+        "max_tokens": 12,
+        "messages": [
+            {
+                "role": "system",
+                "content": (
+                    "You score market reaction to a news headline. "
+                    "Return only one float between -0.3 and 0.3. "
+                    "-0.3 means strongly negative for market sentiment, "
+                    "0.0 means neutral, 0.3 means strongly positive."
+                ),
+            },
+            {
+                "role": "user",
+                "content": f"Headline: {event}",
+            },
+        ],
+    }
+
+    try:
+        response = requests.post(
+            "https://api.openai.com/v1/chat/completions",
+            headers={
+                "Authorization": f"Bearer {api_key}",
+                "Content-Type": "application/json",
+            },
+            json=payload,
+            timeout=20,
+        )
+        response.raise_for_status()
+        data = response.json()
+        content = data["choices"][0]["message"]["content"].strip()
+        match = re.search(r"-?\d+(?:\.\d+)?", content)
+        if not match:
+            return 0.02
+        return clamp(float(match.group()), -0.3, 0.3)
+    except (requests.RequestException, KeyError, IndexError, TypeError, ValueError):
+        return 0.02
+
+
+def get_hybrid_event_score(event: str, api_key: str | None = None) -> tuple[float, float, float, list[str]]:
+    rule_score, signals = score_event_text(event)
+    llm_score = get_event_score_llm(event, api_key=api_key)
+    hybrid_score = clamp((0.6 * llm_score) + (0.4 * rule_score), -0.3, 0.3)
+    return hybrid_score, rule_score, llm_score, signals
+
+
 def select_templates(agent_count: int, rng: random.Random) -> Iterable[PersonaTemplate]:
     full_rounds, remainder = divmod(agent_count, len(PERSONA_TEMPLATES))
     selected = PERSONA_TEMPLATES * full_rounds + PERSONA_TEMPLATES[:remainder]
@@ -256,10 +313,14 @@ def generate_agents(
     agent_count: int = 8,
     randomness: float = 0.12,
     seed: int = 7,
+    openai_api_key: str | None = None,
 ) -> dict:
     rng = random.Random(seed)
     topics = infer_topics(event_text)
-    event_score, signals = score_event_text(event_text)
+    event_score, rule_score, llm_score, signals = get_hybrid_event_score(
+        event_text,
+        api_key=openai_api_key,
+    )
     chosen_templates = list(select_templates(agent_count, rng))
 
     reactions: list[AgentReaction] = []
@@ -290,6 +351,9 @@ def generate_agents(
         "topics": topics,
         "signals": signals,
         "event_score": event_score,
+        "rule_score": rule_score,
+        "llm_score": llm_score,
+        "hybrid_score": event_score,
         "agents": reactions,
         "aggregate_sentiment": aggregate_sentiment,
         "model_probability": model_probability,
