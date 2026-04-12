@@ -3,8 +3,10 @@ from __future__ import annotations
 from dataclasses import dataclass
 import random
 import re
-from typing import Iterable
+from typing import Any, Iterable
 
+
+# ── Keyword / phrase scoring tables ──────────────────────────────────────
 
 POSITIVE_PHRASES = {
     "rate cut": 0.18,
@@ -74,6 +76,8 @@ TOPIC_KEYWORDS = {
     "company": {"apple", "tesla", "nvidia", "microsoft", "meta", "amazon", "google"},
 }
 
+
+# ── Data classes ─────────────────────────────────────────────────────────
 
 @dataclass(frozen=True)
 class PersonaTemplate:
@@ -166,6 +170,8 @@ PERSONA_TEMPLATES = [
 ]
 
 
+# ── Helpers ──────────────────────────────────────────────────────────────
+
 def clamp(value: float, lower: float, upper: float) -> float:
     return max(lower, min(upper, value))
 
@@ -251,6 +257,16 @@ def build_narrative(
     return " ".join(parts)
 
 
+def classify_trade_signal(edge: float, threshold: float = 0.05) -> str:
+    if edge >= threshold:
+        return "BUY"
+    if edge <= -threshold:
+        return "SELL"
+    return "HOLD"
+
+
+# ── Legacy single-event simulation (kept for direct use) ────────────────
+
 def generate_agents(
     event_text: str,
     agent_count: int = 8,
@@ -296,9 +312,130 @@ def generate_agents(
     }
 
 
-def classify_trade_signal(edge: float, threshold: float = 0.05) -> str:
-    if edge >= threshold:
-        return "BUY"
-    if edge <= -threshold:
-        return "SELL"
-    return "HOLD"
+# ── Multi-market simulation ─────────────────────────────────────────────
+
+def _composite_event_score(
+    news_items: list[dict[str, Any]],
+    edges: list[dict[str, Any]],
+) -> tuple[float, list[str], list[str]]:
+    """Score a market by combining all linked news headlines weighted by edges.
+
+    Returns (composite_score, all_signals, all_topics).
+    """
+    if not news_items or not edges:
+        return 0.02, ["no linked news — neutral baseline"], ["markets"]
+
+    edge_map = {e["source_id"]: e for e in edges}
+    total_score = 0.0
+    all_signals: list[str] = []
+    topic_set: set[str] = set()
+
+    for news in news_items:
+        edge = edge_map.get(news["id"])
+        if edge is None:
+            continue
+        raw_score, signals = score_event_text(news["headline"])
+        weighted = raw_score * edge["direction"] * edge["strength"]
+        total_score += weighted
+        prefix = news["headline"][:40]
+        for sig in signals:
+            all_signals.append(f"[{prefix}...] {sig}")
+        topic_set.update(infer_topics(news["headline"]))
+
+    if not all_signals:
+        return 0.02, ["no matched signals — neutral baseline"], ["markets"]
+
+    return clamp(total_score, -0.35, 0.35), all_signals, sorted(topic_set) or ["markets"]
+
+
+def simulate_market(
+    market: dict[str, Any],
+    news_items: list[dict[str, Any]],
+    news_edges: list[dict[str, Any]],
+    agent_count: int = 8,
+    randomness: float = 0.12,
+    seed: int = 7,
+    threshold: float = 0.05,
+) -> dict[str, Any]:
+    """Run the full agent simulation for a single market.
+
+    *news_items* should be only the news linked to this market.
+    *news_edges* should be only the news→market edges for this market.
+    """
+    event_score, signals, topics = _composite_event_score(news_items, news_edges)
+
+    rng = random.Random(seed)
+    chosen_templates = list(select_templates(agent_count, rng))
+
+    reactions: list[AgentReaction] = []
+    for index, template in enumerate(chosen_templates, start=1):
+        topic_effect = sum(template.topic_tilts.get(t, 0.0) for t in topics)
+        volatility_scale = 0.6 + template.volatility
+        noise = rng.uniform(-randomness, randomness) * volatility_scale
+        raw_sentiment = event_score + template.base_bias + topic_effect + noise
+        sentiment = clamp(raw_sentiment, -1.0, 1.0)
+        reactions.append(
+            AgentReaction(
+                name=f"{template.name} {index}",
+                role=template.role,
+                sentiment=sentiment,
+                narrative=build_narrative(template, topics, event_score, topic_effect, noise),
+            )
+        )
+
+    aggregate_sentiment = clamp(
+        sum(r.sentiment for r in reactions) / max(len(reactions), 1),
+        -0.49,
+        0.49,
+    )
+    model_probability = clamp(0.5 + aggregate_sentiment, 0.0, 1.0)
+    market_probability = market["market_probability"]
+    edge_value = model_probability - market_probability
+    signal = classify_trade_signal(edge_value, threshold)
+
+    return {
+        "market": market,
+        "topics": topics,
+        "signals": signals,
+        "event_score": event_score,
+        "agents": reactions,
+        "aggregate_sentiment": aggregate_sentiment,
+        "model_probability": model_probability,
+        "edge": edge_value,
+        "signal": signal,
+    }
+
+
+def simulate_all(
+    state: dict[str, list],
+    agent_count: int = 8,
+    randomness: float = 0.12,
+    seed: int = 7,
+    threshold: float = 0.05,
+) -> list[dict[str, Any]]:
+    """Run simulate_market for every market in the state, return list of results."""
+    news_by_id: dict[str, dict] = {n["id"]: n for n in state["news"]}
+    results: list[dict[str, Any]] = []
+
+    for market in state["markets"]:
+        news_edges = [
+            e for e in state["edges"]
+            if e["target_id"] == market["id"] and e["source_type"] == "news"
+        ]
+        linked_news = [
+            news_by_id[e["source_id"]]
+            for e in news_edges
+            if e["source_id"] in news_by_id
+        ]
+        result = simulate_market(
+            market=market,
+            news_items=linked_news,
+            news_edges=news_edges,
+            agent_count=agent_count,
+            randomness=randomness,
+            seed=seed,
+            threshold=threshold,
+        )
+        results.append(result)
+
+    return results
