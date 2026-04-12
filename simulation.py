@@ -1,12 +1,17 @@
 from __future__ import annotations
 
 from dataclasses import dataclass
-import os
 import random
 import re
 from typing import Any, Iterable
 
-import requests
+from model import (
+    clear_last_llm_error,
+    get_agent_round_llm,
+    get_event_score_llm as model_event_score_llm,
+    get_last_llm_error,
+    summarize_agent_round,
+)
 
 
 # ── Keyword / phrase scoring tables ──────────────────────────────────────
@@ -97,6 +102,8 @@ class AgentReaction:
     role: str
     sentiment: float
     narrative: str
+    confidence: float | None = None
+    source: str = "heuristic"
 
 
 PERSONA_TEMPLATES = [
@@ -221,50 +228,7 @@ def score_event_text(text: str) -> tuple[float, list[str]]:
 
 
 def get_event_score_llm(event: str, api_key: str | None = None) -> float:
-    api_key = api_key or os.getenv("OPENAI_API_KEY")
-    if not api_key or not event.strip():
-        return 0.02
-
-    payload = {
-        "model": "gpt-4o-mini",
-        "temperature": 0.2,
-        "max_tokens": 12,
-        "messages": [
-            {
-                "role": "system",
-                "content": (
-                    "You score market reaction to a news headline. "
-                    "Return only one float between -0.3 and 0.3. "
-                    "-0.3 means strongly negative for market sentiment, "
-                    "0.0 means neutral, 0.3 means strongly positive."
-                ),
-            },
-            {
-                "role": "user",
-                "content": f"Headline: {event}",
-            },
-        ],
-    }
-
-    try:
-        response = requests.post(
-            "https://api.openai.com/v1/chat/completions",
-            headers={
-                "Authorization": f"Bearer {api_key}",
-                "Content-Type": "application/json",
-            },
-            json=payload,
-            timeout=20,
-        )
-        response.raise_for_status()
-        data = response.json()
-        content = data["choices"][0]["message"]["content"].strip()
-        match = re.search(r"-?\d+(?:\.\d+)?", content)
-        if not match:
-            return 0.02
-        return clamp(float(match.group()), -0.3, 0.3)
-    except (requests.RequestException, KeyError, IndexError, TypeError, ValueError):
-        return 0.02
+    return model_event_score_llm(event, api_key=api_key)
 
 
 def get_hybrid_event_score(event: str, api_key: str | None = None) -> tuple[float, float, float, list[str]]:
@@ -314,6 +278,179 @@ def build_narrative(
     return " ".join(parts)
 
 
+def _simulate_persona_reaction(
+    *,
+    template: PersonaTemplate,
+    index: int,
+    topics: list[str],
+    event_score: float,
+    randomness: float,
+    rng: random.Random,
+    confidence: float | None = None,
+    narrative_override: str | None = None,
+    source: str = "heuristic",
+) -> AgentReaction:
+    topic_effect = sum(template.topic_tilts.get(topic, 0.0) for topic in topics)
+    volatility_scale = 0.6 + template.volatility
+    noise = rng.uniform(-randomness, randomness) * volatility_scale
+    raw_sentiment = event_score + template.base_bias + topic_effect + noise
+    sentiment = clamp(raw_sentiment, -1.0, 1.0)
+    narrative = narrative_override or build_narrative(template, topics, event_score, topic_effect, noise)
+    return AgentReaction(
+        name=f"{template.name} {index}",
+        role=template.role,
+        sentiment=sentiment,
+        narrative=narrative,
+        confidence=confidence,
+        source=source,
+    )
+
+
+def _persona_focus_text(template: PersonaTemplate) -> str:
+    ranked_topics = sorted(
+        template.topic_tilts.items(),
+        key=lambda item: abs(item[1]),
+        reverse=True,
+    )
+    top_topics = [f"{topic} ({tilt:+.2f})" for topic, tilt in ranked_topics[:3] if abs(tilt) >= 0.04]
+    structural_bias = "bullish" if template.base_bias > 0.03 else "bearish" if template.base_bias < -0.03 else "balanced"
+    focus = ", ".join(top_topics) if top_topics else "broad market reads"
+    return f"Structurally {structural_bias}; focus areas: {focus}."
+
+
+def _round_memory(reaction: AgentReaction) -> str:
+    return f"Prior stance {reaction.sentiment:+.2f}. {reaction.narrative}"
+
+
+def _simulate_with_llm_agents(
+    *,
+    event_text: str,
+    event_score: float,
+    rule_score: float,
+    topics: list[str],
+    signals: list[str],
+    agent_count: int,
+    randomness: float,
+    seed: int,
+    market_name: str,
+    market_description: str,
+    market_probability: float,
+    linked_headlines: list[str],
+    openai_api_key: str | None = None,
+) -> dict[str, Any]:
+    rng = random.Random(seed)
+    chosen_templates = list(select_templates(agent_count, rng))
+    clear_last_llm_error()
+    personas = [
+        {
+            "name": f"{template.name} {index}",
+            "role": template.role,
+            "worldview": _persona_focus_text(template),
+        }
+        for index, template in enumerate(chosen_templates, start=1)
+    ]
+
+    round_one_rows = get_agent_round_llm(
+        personas=personas,
+        event_text=event_text,
+        market_name=market_name,
+        market_description=market_description,
+        market_probability=market_probability,
+        topics=topics,
+        hybrid_score=event_score,
+        linked_headlines=linked_headlines,
+        round_index=1,
+        api_key=openai_api_key,
+    )
+    llm_error = get_last_llm_error()
+
+    if round_one_rows is None:
+        final_reactions = [
+            _simulate_persona_reaction(
+                template=template,
+                index=index,
+                topics=topics,
+                event_score=event_score,
+                randomness=randomness,
+                rng=rng,
+                confidence=0.55,
+                source="heuristic-fallback",
+            )
+            for index, template in enumerate(chosen_templates, start=1)
+        ]
+    else:
+        round_one_reactions = [
+            AgentReaction(
+                name=row["name"],
+                role=template.role,
+                sentiment=clamp(float(row["sentiment"]), -1.0, 1.0),
+                narrative=str(row["narrative"]).strip(),
+                confidence=clamp(float(row["confidence"]), 0.0, 1.0),
+                source=row.get("source", "llm"),
+            )
+            for template, row in zip(chosen_templates, round_one_rows)
+        ]
+        peer_summary = summarize_agent_round(
+            [{"name": reaction.name, "sentiment": reaction.sentiment} for reaction in round_one_reactions]
+        )
+        prior_memories = {
+            reaction.name: _round_memory(reaction)
+            for reaction in round_one_reactions
+        }
+        round_two_rows = get_agent_round_llm(
+            personas=personas,
+            event_text=event_text,
+            market_name=market_name,
+            market_description=market_description,
+            market_probability=market_probability,
+            topics=topics,
+            hybrid_score=event_score,
+            linked_headlines=linked_headlines,
+            round_index=2,
+            prior_memories=prior_memories,
+            peer_summary=peer_summary,
+            api_key=openai_api_key,
+        )
+        llm_error = get_last_llm_error()
+        if round_two_rows is None:
+            final_reactions = round_one_reactions
+        else:
+            final_reactions = [
+                AgentReaction(
+                    name=row["name"],
+                    role=template.role,
+                    sentiment=clamp(float(row["sentiment"]), -1.0, 1.0),
+                    narrative=str(row["narrative"]).strip(),
+                    confidence=clamp(float(row["confidence"]), 0.0, 1.0),
+                    source=row.get("source", "llm"),
+                )
+                for template, row in zip(chosen_templates, round_two_rows)
+            ]
+            llm_error = get_last_llm_error()
+
+    aggregate_sentiment = clamp(
+        sum(reaction.sentiment for reaction in final_reactions) / max(len(final_reactions), 1),
+        -0.49,
+        0.49,
+    )
+    model_probability = clamp(0.5 + aggregate_sentiment, 0.0, 1.0)
+    agent_backend = "llm_agents" if any(reaction.source == "llm" for reaction in final_reactions) else "heuristic_fallback"
+
+    return {
+        "event_text": event_text,
+        "topics": topics,
+        "signals": signals,
+        "event_score": event_score,
+        "hybrid_score": event_score,
+        "rule_score": rule_score,
+        "agents": final_reactions,
+        "aggregate_sentiment": aggregate_sentiment,
+        "model_probability": model_probability,
+        "agent_backend": agent_backend,
+        "llm_error": llm_error,
+    }
+
+
 def _simulate_from_components(
     *,
     event_text: str,
@@ -327,22 +464,17 @@ def _simulate_from_components(
     rng = random.Random(seed)
     chosen_templates = list(select_templates(agent_count, rng))
 
-    reactions: list[AgentReaction] = []
-    for index, template in enumerate(chosen_templates, start=1):
-        topic_effect = sum(template.topic_tilts.get(topic, 0.0) for topic in topics)
-        volatility_scale = 0.6 + template.volatility
-        noise = rng.uniform(-randomness, randomness) * volatility_scale
-        raw_sentiment = event_score + template.base_bias + topic_effect + noise
-        sentiment = clamp(raw_sentiment, -1.0, 1.0)
-        reactions.append(
-            AgentReaction(
-                name=f"{template.name} {index}",
-                role=template.role,
-                sentiment=sentiment,
-                narrative=build_narrative(template, topics, event_score, topic_effect, noise),
-            )
+    reactions = [
+        _simulate_persona_reaction(
+            template=template,
+            index=index,
+            topics=topics,
+            event_score=event_score,
+            randomness=randomness,
+            rng=rng,
         )
-
+        for index, template in enumerate(chosen_templates, start=1)
+    ]
     aggregate_sentiment = clamp(
         sum(reaction.sentiment for reaction in reactions) / max(len(reactions), 1),
         -0.49,
@@ -359,6 +491,8 @@ def _simulate_from_components(
         "agents": reactions,
         "aggregate_sentiment": aggregate_sentiment,
         "model_probability": model_probability,
+        "agent_backend": "heuristic",
+        "llm_error": None,
     }
 
 
@@ -378,21 +512,39 @@ def generate_agents(
     randomness: float = 0.12,
     seed: int = 7,
     openai_api_key: str | None = None,
+    mode: str = "heuristic",
 ) -> dict:
     topics = infer_topics(event_text)
     event_score, rule_score, llm_score, signals = get_hybrid_event_score(
         event_text,
         api_key=openai_api_key,
     )
-    result = _simulate_from_components(
-        event_text=event_text,
-        event_score=event_score,
-        topics=topics,
-        signals=signals,
-        agent_count=agent_count,
-        randomness=randomness,
-        seed=seed,
-    )
+    if mode == "llm_agents":
+        result = _simulate_with_llm_agents(
+            event_text=event_text,
+            event_score=event_score,
+            rule_score=rule_score,
+            topics=topics,
+            signals=signals,
+            agent_count=agent_count,
+            randomness=randomness,
+            seed=seed,
+            market_name="Single Event",
+            market_description=event_text,
+            market_probability=0.5,
+            linked_headlines=[event_text],
+            openai_api_key=openai_api_key,
+        )
+    else:
+        result = _simulate_from_components(
+            event_text=event_text,
+            event_score=event_score,
+            topics=topics,
+            signals=signals,
+            agent_count=agent_count,
+            randomness=randomness,
+            seed=seed,
+        )
     result["rule_score"] = rule_score
     result["llm_score"] = llm_score
     return result
@@ -466,6 +618,7 @@ def simulate_market(
     randomness: float = 0.12,
     seed: int = 7,
     threshold: float = 0.05,
+    mode: str = "heuristic",
 ) -> dict[str, Any]:
     """Run the full agent simulation for a single market.
 
@@ -473,15 +626,32 @@ def simulate_market(
     *news_edges* should be only the news→market edges for this market.
     """
     event_score, rule_score, llm_score, signals, topics, linked_news = _composite_event_score(news_items, news_edges)
-    result = _simulate_from_components(
-        event_text=" | ".join(news["headline"] for news in news_items[:3]) or market["description"],
-        event_score=event_score,
-        topics=topics,
-        signals=signals,
-        agent_count=agent_count,
-        randomness=randomness,
-        seed=seed,
-    )
+    event_text = " | ".join(news["headline"] for news in news_items[:3]) or market["description"]
+    if mode == "llm_agents":
+        result = _simulate_with_llm_agents(
+            event_text=event_text,
+            event_score=event_score,
+            rule_score=rule_score,
+            topics=topics,
+            signals=signals,
+            agent_count=agent_count,
+            randomness=randomness,
+            seed=seed,
+            market_name=market["name"],
+            market_description=market["description"],
+            market_probability=market["market_probability"],
+            linked_headlines=[news["headline"] for news in news_items],
+        )
+    else:
+        result = _simulate_from_components(
+            event_text=event_text,
+            event_score=event_score,
+            topics=topics,
+            signals=signals,
+            agent_count=agent_count,
+            randomness=randomness,
+            seed=seed,
+        )
     model_probability = result["model_probability"]
     market_probability = market["market_probability"]
     edge_value = model_probability - market_probability
@@ -504,6 +674,7 @@ def simulate_all(
     randomness: float = 0.12,
     seed: int = 7,
     threshold: float = 0.05,
+    mode: str = "heuristic",
 ) -> list[dict[str, Any]]:
     """Run simulate_market for every market in the state, return list of results."""
     news_by_id: dict[str, dict] = {n["id"]: n for n in state["news"]}
@@ -527,6 +698,7 @@ def simulate_all(
             randomness=randomness,
             seed=seed,
             threshold=threshold,
+            mode=mode,
         )
         results.append(result)
 
