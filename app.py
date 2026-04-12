@@ -6,6 +6,7 @@ from pathlib import Path
 import pandas as pd
 import streamlit as st
 
+from model import test_openai_connectivity
 from simulation import simulate_all, simulate_market
 from utils import get_state, news_edges_for_market
 
@@ -76,6 +77,24 @@ with st.sidebar:
         st.caption("`NEWSAPI_KEY` not set. Stored news in the app still works.")
     if not os.getenv("OPENAI_API_KEY"):
         st.caption("`OPENAI_API_KEY` not set. Hybrid scoring falls back to `0.02` and AI agents degrade to heuristics.")
+
+    st.divider()
+    st.subheader("OpenAI Check")
+    if st.button("Test OpenAI connection", use_container_width=True):
+        with st.spinner("Testing OpenAI connection..."):
+            st.session_state.openai_test_result = test_openai_connectivity()
+        status = st.session_state.openai_test_result
+        if status["ok"]:
+            print(f"[openai_test] success: {status['message']}")
+        else:
+            print(f"[openai_test] failure: {status['message']}")
+
+    openai_test_result = st.session_state.get("openai_test_result")
+    if openai_test_result:
+        if openai_test_result["ok"]:
+            st.success(openai_test_result["message"])
+        else:
+            st.error(openai_test_result["message"])
 
     run = st.button("Run all simulations", type="primary", use_container_width=True)
 
