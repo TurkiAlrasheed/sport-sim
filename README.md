@@ -10,6 +10,10 @@ The app takes a real-world event, simulates how a small set of personas react to
 python3 -m venv .venv
 source .venv/bin/activate
 pip install -r requirements.txt
+cp .env.example .env
+set -a
+source .env
+set +a
 streamlit run app.py
 ```
 
@@ -33,3 +37,4 @@ streamlit run app.py
 - Market probability is currently user-provided or mocked via presets
 - Event understanding is intentionally lightweight and heuristic-based
 - This is meant to be a hackathon starter, not a production pricing model
+- Real API keys should go in `.env`, which is ignored by git
