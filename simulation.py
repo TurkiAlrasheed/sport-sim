@@ -314,29 +314,17 @@ def build_narrative(
     return " ".join(parts)
 
 
-def classify_trade_signal(edge: float, threshold: float = 0.05) -> str:
-    if edge >= threshold:
-        return "BUY"
-    if edge <= -threshold:
-        return "SELL"
-    return "HOLD"
-
-
-# ── Legacy single-event simulation (kept for direct use) ────────────────
-
-def generate_agents(
+def _simulate_from_components(
+    *,
     event_text: str,
-    agent_count: int = 8,
-    randomness: float = 0.12,
-    seed: int = 7,
-    openai_api_key: str | None = None,
-) -> dict:
+    event_score: float,
+    topics: list[str],
+    signals: list[str],
+    agent_count: int,
+    randomness: float,
+    seed: int,
+) -> dict[str, Any]:
     rng = random.Random(seed)
-    topics = infer_topics(event_text)
-    event_score, rule_score, llm_score, signals = get_hybrid_event_score(
-        event_text,
-        api_key=openai_api_key,
-    )
     chosen_templates = list(select_templates(agent_count, rng))
 
     reactions: list[AgentReaction] = []
@@ -367,8 +355,6 @@ def generate_agents(
         "topics": topics,
         "signals": signals,
         "event_score": event_score,
-        "rule_score": rule_score,
-        "llm_score": llm_score,
         "hybrid_score": event_score,
         "agents": reactions,
         "aggregate_sentiment": aggregate_sentiment,
@@ -376,40 +362,100 @@ def generate_agents(
     }
 
 
+def classify_trade_signal(edge: float, threshold: float = 0.05) -> str:
+    if edge >= threshold:
+        return "BUY"
+    if edge <= -threshold:
+        return "SELL"
+    return "HOLD"
+
+
+# ── Legacy single-event simulation (kept for direct use) ────────────────
+
+def generate_agents(
+    event_text: str,
+    agent_count: int = 8,
+    randomness: float = 0.12,
+    seed: int = 7,
+    openai_api_key: str | None = None,
+) -> dict:
+    topics = infer_topics(event_text)
+    event_score, rule_score, llm_score, signals = get_hybrid_event_score(
+        event_text,
+        api_key=openai_api_key,
+    )
+    result = _simulate_from_components(
+        event_text=event_text,
+        event_score=event_score,
+        topics=topics,
+        signals=signals,
+        agent_count=agent_count,
+        randomness=randomness,
+        seed=seed,
+    )
+    result["rule_score"] = rule_score
+    result["llm_score"] = llm_score
+    return result
+
+
 # ── Multi-market simulation ─────────────────────────────────────────────
 
 def _composite_event_score(
     news_items: list[dict[str, Any]],
     edges: list[dict[str, Any]],
-) -> tuple[float, list[str], list[str]]:
+) -> tuple[float, float, float, list[str], list[str], list[dict[str, Any]]]:
     """Score a market by combining all linked news headlines weighted by edges.
 
-    Returns (composite_score, all_signals, all_topics).
+    Returns composite hybrid/rule/llm scores, signals, topics, and linked-news detail.
     """
     if not news_items or not edges:
-        return 0.02, ["no linked news — neutral baseline"], ["markets"]
+        return 0.02, 0.02, 0.02, ["no linked news — neutral baseline"], ["markets"], []
 
     edge_map = {e["source_id"]: e for e in edges}
-    total_score = 0.0
+    total_hybrid_score = 0.0
+    total_rule_score = 0.0
+    total_llm_score = 0.0
     all_signals: list[str] = []
     topic_set: set[str] = set()
+    linked_news: list[dict[str, Any]] = []
 
     for news in news_items:
         edge = edge_map.get(news["id"])
         if edge is None:
             continue
-        raw_score, signals = score_event_text(news["headline"])
-        weighted = raw_score * edge["direction"] * edge["strength"]
-        total_score += weighted
+        hybrid_score, rule_score, llm_score, signals = get_hybrid_event_score(news["headline"])
+        weighted_hybrid = hybrid_score * edge["direction"] * edge["strength"]
+        weighted_rule = rule_score * edge["direction"] * edge["strength"]
+        weighted_llm = llm_score * edge["direction"] * edge["strength"]
+        total_hybrid_score += weighted_hybrid
+        total_rule_score += weighted_rule
+        total_llm_score += weighted_llm
         prefix = news["headline"][:40]
         for sig in signals:
             all_signals.append(f"[{prefix}...] {sig}")
         topic_set.update(infer_topics(news["headline"]))
+        linked_news.append(
+            {
+                "headline": news["headline"],
+                "timestamp": news.get("timestamp", ""),
+                "direction": edge["direction"],
+                "strength": edge["strength"],
+                "reason": edge.get("reason", ""),
+                "effect": weighted_hybrid,
+            }
+        )
 
     if not all_signals:
-        return 0.02, ["no matched signals — neutral baseline"], ["markets"]
+        return 0.02, 0.02, 0.02, ["no matched signals — neutral baseline"], ["markets"], linked_news
 
-    return clamp(total_score, -0.35, 0.35), all_signals, sorted(topic_set) or ["markets"]
+    return (
+        clamp(total_hybrid_score, -0.35, 0.35),
+        clamp(total_rule_score, -0.35, 0.35),
+        clamp(total_llm_score, -0.3, 0.3),
+        all_signals,
+        sorted(topic_set) or ["markets"],
+        linked_news,
+    )
 
 
 def simulate_market(
@@ -426,45 +472,27 @@ def simulate_market(
     *news_items* should be only the news linked to this market.
     *news_edges* should be only the news→market edges for this market.
     """
-    event_score, signals, topics = _composite_event_score(news_items, news_edges)
-
-    rng = random.Random(seed)
-    chosen_templates = list(select_templates(agent_count, rng))
-
-    reactions: list[AgentReaction] = []
-    for index, template in enumerate(chosen_templates, start=1):
-        topic_effect = sum(template.topic_tilts.get(t, 0.0) for t in topics)
-        volatility_scale = 0.6 + template.volatility
-        noise = rng.uniform(-randomness, randomness) * volatility_scale
-        raw_sentiment = event_score + template.base_bias + topic_effect + noise
-        sentiment = clamp(raw_sentiment, -1.0, 1.0)
-        reactions.append(
-            AgentReaction(
-                name=f"{template.name} {index}",
-                role=template.role,
-                sentiment=sentiment,
-                narrative=build_narrative(template, topics, event_score, topic_effect, noise),
-            )
-        )
-
-    aggregate_sentiment = clamp(
-        sum(r.sentiment for r in reactions) / max(len(reactions), 1),
-        -0.49,
-        0.49,
+    event_score, rule_score, llm_score, signals, topics, linked_news = _composite_event_score(news_items, news_edges)
+    result = _simulate_from_components(
+        event_text=" | ".join(news["headline"] for news in news_items[:3]) or market["description"],
+        event_score=event_score,
+        topics=topics,
+        signals=signals,
+        agent_count=agent_count,
+        randomness=randomness,
+        seed=seed,
     )
-    model_probability = clamp(0.5 + aggregate_sentiment, 0.0, 1.0)
+    model_probability = result["model_probability"]
     market_probability = market["market_probability"]
     edge_value = model_probability - market_probability
     signal = classify_trade_signal(edge_value, threshold)
 
     return {
+        **result,
         "market": market,
-        "topics": topics,
-        "signals": signals,
-        "event_score": event_score,
-        "agents": reactions,
-        "aggregate_sentiment": aggregate_sentiment,
-        "model_probability": model_probability,
+        "rule_score": rule_score,
+        "llm_score": llm_score,
+        "linked_news": linked_news,
         "edge": edge_value,
         "signal": signal,
     }

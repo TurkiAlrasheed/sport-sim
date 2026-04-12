@@ -7,7 +7,12 @@ from dotenv import load_dotenv
 load_dotenv()
 
 import streamlit as st
-from streamlit_agraph import agraph, Config, Edge, Node
+
+try:
+    from streamlit_agraph import agraph, Config, Edge, Node
+except ImportError:
+    agraph = None
+    Config = Edge = Node = None
 
 from edge_analysis import generate_market_edges, generate_news_edges
 from utils import (
@@ -37,59 +42,78 @@ CATEGORY_COLORS = {
     "company": "#8b5cf6",
 }
 
-# ── Build graph nodes and edges ──────────────────────────────────────────
-
-nodes: list[Node] = []
-edges_vis: list[Edge] = []
-
-for m in state["markets"]:
-    nodes.append(Node(
-        id=m["id"],
-        label=m["name"][:30],
-        title=m["description"],
-        color=CATEGORY_COLORS.get(m["category"], "#94a3b8"),
-        size=25,
-        shape="dot",
-    ))
-
-for n in state["news"]:
-    nodes.append(Node(
-        id=n["id"],
-        label=n["headline"][:30],
-        title=n["headline"],
-        color=CATEGORY_COLORS.get(n["category"], "#94a3b8"),
-        size=18,
-        shape="square",
-    ))
-
-for e in state["edges"]:
-    edge_color = "#22c55e" if e["direction"] > 0 else "#ef4444"
-    edges_vis.append(Edge(
-        source=e["source_id"],
-        target=e["target_id"],
-        label=f"{'+' if e['direction'] > 0 else '-'}{e['strength']:.1f}",
-        color=edge_color,
-        width=1 + e["strength"] * 3,
-        title=e.get("reason", ""),
-    ))
-
-config = Config(
-    width="100%",
-    height=600,
-    directed=True,
-    physics=True,
-    hierarchical=False,
-    nodeHighlightBehavior=True,
-    highlightColor="#f1fa8c",
-    collapsible=False,
-)
-
-if nodes:
-    st.subheader("Interactive Graph")
-    st.write("Circles = markets, squares = news. Green edges = positive influence, red = negative.")
-    agraph(nodes=nodes, edges=edges_vis, config=config)
+if agraph is None:
+    st.warning("`streamlit-agraph` is not installed. Showing a dependency table instead.")
+    if state["edges"]:
+        rows = []
+        for edge in state["edges"]:
+            source_obj = find_market(state, edge["source_id"]) or find_news(state, edge["source_id"])
+            target_obj = find_market(state, edge["target_id"])
+            rows.append(
+                {
+                    "Source": (source_obj or {}).get("name", (source_obj or {}).get("headline", edge["source_id"])),
+                    "Source Type": edge["source_type"],
+                    "Target": (target_obj or {}).get("name", edge["target_id"]),
+                    "Direction": "+" if edge["direction"] > 0 else "-",
+                    "Strength": edge["strength"],
+                    "Reason": edge.get("reason", ""),
+                }
+            )
+        st.dataframe(rows, use_container_width=True, hide_index=True)
+    else:
+        st.info("Add some markets and news first to see dependencies.")
 else:
-    st.info("Add some markets and news first to see the graph.")
+    nodes: list[Node] = []
+    edges_vis: list[Edge] = []
+
+    for m in state["markets"]:
+        nodes.append(Node(
+            id=m["id"],
+            label=m["name"][:30],
+            title=m["description"],
+            color=CATEGORY_COLORS.get(m["category"], "#94a3b8"),
+            size=25,
+            shape="dot",
+        ))
+
+    for n in state["news"]:
+        nodes.append(Node(
+            id=n["id"],
+            label=n["headline"][:30],
+            title=n["headline"],
+            color=CATEGORY_COLORS.get(n["category"], "#94a3b8"),
+            size=18,
+            shape="square",
+        ))
+
+    for e in state["edges"]:
+        edge_color = "#22c55e" if e["direction"] > 0 else "#ef4444"
+        edges_vis.append(Edge(
+            source=e["source_id"],
+            target=e["target_id"],
+            label=f"{'+' if e['direction'] > 0 else '-'}{e['strength']:.1f}",
+            color=edge_color,
+            width=1 + e["strength"] * 3,
+            title=e.get("reason", ""),
+        ))
+
+    config = Config(
+        width="100%",
+        height=600,
+        directed=True,
+        physics=True,
+        hierarchical=False,
+        nodeHighlightBehavior=True,
+        highlightColor="#f1fa8c",
+        collapsible=False,
+    )
+
+    if nodes:
+        st.subheader("Interactive Graph")
+        st.write("Circles = markets, squares = news. Green edges = positive influence, red = negative.")
+        agraph(nodes=nodes, edges=edges_vis, config=config)
+    else:
+        st.info("Add some markets and news first to see the graph.")
 
 # ── AI edge generation ────────────────────────────────────────────────────
 
