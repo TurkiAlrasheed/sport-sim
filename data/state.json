@@ -12,7 +12,7 @@
       "name": "US CPI above 3.5% for June 2026",
       "description": "US CPI inflation prints above 3.5% for June 2026",
       "category": "macro",
-      "market_probability": 0.30
+      "market_probability": 0.3
     },
     {
       "id": "us-recession-2026",
@@ -47,7 +47,7 @@
       "name": "Spot Ethereum ETF approved in 2026",
       "description": "SEC approves a spot Ethereum ETF by end of 2026",
       "category": "crypto",
-      "market_probability": 0.40
+      "market_probability": 0.4
     },
     {
       "id": "tesla-q2-earnings",
@@ -138,79 +138,71 @@
       "target_id": "sp500-above-6000",
       "direction": 1,
       "strength": 0.7,
-      "reason": "Rate cuts lower discount rates and lift equities"
+      "reason": "A Fed rate cut typically lowers borrowing costs, which can boost corporate profits and lead to higher equity valuations, including the S&P 500."
     },
     {
       "source_id": "fed-rate-cut",
       "source_type": "market",
-      "target_id": "btc-above-100k",
-      "direction": 1,
+      "target_id": "us-recession-2026",
+      "direction": -1,
       "strength": 0.6,
-      "reason": "Liquidity boost flows into risk assets"
-    },
-    {
-      "source_id": "fed-rate-cut",
-      "source_type": "market",
-      "target_id": "us-cpi-above-3-5",
-      "direction": 1,
-      "strength": 0.4,
-      "reason": "Easing could reignite price pressures"
+      "reason": "A Fed rate cut is often a response to economic weakness, which could indicate a higher likelihood of a recession."
     },
     {
       "source_id": "us-cpi-above-3-5",
       "source_type": "market",
       "target_id": "fed-rate-cut",
-      "direction": -1,
-      "strength": 0.9,
-      "reason": "Hot inflation forces the Fed to hold or hike"
+      "direction": 1,
+      "strength": 0.7,
+      "reason": "Higher inflation expectations typically lead the Fed to cut rates to stimulate the economy."
     },
     {
       "source_id": "us-cpi-above-3-5",
       "source_type": "market",
       "target_id": "us-recession-2026",
+      "direction": -1,
+      "strength": 0.6,
+      "reason": "Higher inflation rates can contribute to economic instability, making a recession less likely."
+    },
+    {
+      "source_id": "us-cpi-above-3-5",
+      "source_type": "market",
+      "target_id": "sp500-above-6000",
       "direction": 1,
-      "strength": 0.4,
-      "reason": "Stagflation risk rises as real incomes erode"
+      "strength": 0.5,
+      "reason": "Higher inflation can lead to increased corporate earnings, boosting equity valuations."
     },
     {
       "source_id": "us-recession-2026",
       "source_type": "market",
       "target_id": "fed-rate-cut",
       "direction": 1,
-      "strength": 0.8,
-      "reason": "Fed responds to economic weakness with easing"
-    },
-    {
-      "source_id": "us-recession-2026",
-      "source_type": "market",
-      "target_id": "tesla-q2-earnings",
-      "direction": -1,
-      "strength": 0.6,
-      "reason": "Consumer spending drops hurt auto demand"
+      "strength": 0.7,
+      "reason": "A recession typically leads the Federal Reserve to cut interest rates to stimulate the economy."
     },
     {
       "source_id": "us-recession-2026",
       "source_type": "market",
       "target_id": "sp500-above-6000",
       "direction": -1,
-      "strength": 0.8,
-      "reason": "Risk-off selloff drags the index"
-    },
-    {
-      "source_id": "us-recession-2026",
-      "source_type": "market",
-      "target_id": "oil-above-90",
-      "direction": -1,
-      "strength": 0.5,
-      "reason": "Demand destruction pushes crude prices down"
+      "strength": 0.6,
+      "reason": "A recession is likely to negatively impact equity valuations, leading to a decrease in the S&P 500 index."
     },
     {
       "source_id": "sp500-above-6000",
       "source_type": "market",
-      "target_id": "btc-above-100k",
+      "target_id": "fed-rate-cut",
       "direction": 1,
-      "strength": 0.4,
-      "reason": "Broad risk-on appetite spills into crypto"
+      "strength": 0.7,
+      "reason": "A strong performance of the S&P 500 above 6,000 is likely to prompt the Fed to cut rates to sustain economic growth."
+    },
+    {
+      "source_id": "sp500-above-6000",
+      "source_type": "market",
+      "target_id": "tesla-q2-earnings",
+      "direction": 1,
+      "strength": 0.6,
+      "reason": "A rising S&P 500 often reflects overall market confidence, which can positively influence Tesla's earnings performance."
     },
     {
       "source_id": "sp500-above-6000",
@@ -218,103 +210,95 @@
       "target_id": "nvidia-above-4t",
       "direction": 1,
       "strength": 0.5,
-      "reason": "Index rally lifts its largest constituents"
+      "reason": "A bullish S&P 500 may lead to increased investment in tech stocks, boosting Nvidia's market cap."
     },
     {
       "source_id": "oil-above-90",
       "source_type": "market",
-      "target_id": "us-cpi-above-3-5",
+      "target_id": "sp500-above-6000",
       "direction": 1,
       "strength": 0.6,
-      "reason": "Energy costs feed directly into headline CPI"
+      "reason": "Higher oil prices can lead to increased revenues for energy companies, boosting overall equity valuations in the S&P 500."
     },
     {
       "source_id": "oil-above-90",
       "source_type": "market",
-      "target_id": "us-recession-2026",
+      "target_id": "btc-above-100k",
       "direction": 1,
-      "strength": 0.4,
-      "reason": "Oil shock acts as a tax on consumers and businesses"
-    },
-    {
-      "source_id": "oil-above-90",
-      "source_type": "market",
-      "target_id": "tesla-q2-earnings",
-      "direction": 1,
-      "strength": 0.3,
-      "reason": "High gas prices accelerate EV adoption"
+      "strength": 0.5,
+      "reason": "Rising oil prices may lead to increased inflation expectations, driving investors towards Bitcoin as a hedge, potentially increasing its price."
     },
     {
       "source_id": "btc-above-100k",
       "source_type": "market",
       "target_id": "eth-etf-approved",
       "direction": 1,
-      "strength": 0.4,
-      "reason": "Bitcoin milestone strengthens institutional crypto narrative"
+      "strength": 0.7,
+      "reason": "A significant rise in Bitcoin's price often leads to increased interest and investment in other cryptocurrencies, including Ethereum, potentially boosting the chances of an Ethereum ETF approval."
+    },
+    {
+      "source_id": "btc-above-100k",
+      "source_type": "market",
+      "target_id": "sp500-above-6000",
+      "direction": 1,
+      "strength": 0.5,
+      "reason": "A surge in Bitcoin's price can positively influence investor sentiment towards risk assets, including equities like the S&P 500."
     },
     {
       "source_id": "eth-etf-approved",
       "source_type": "market",
       "target_id": "btc-above-100k",
       "direction": 1,
+      "strength": 0.7,
+      "reason": "Approval of a spot Ethereum ETF is likely to boost overall investor confidence in cryptocurrencies, leading to increased demand and higher prices for Bitcoin."
+    },
+    {
+      "source_id": "eth-etf-approved",
+      "source_type": "market",
+      "target_id": "sp500-above-6000",
+      "direction": 1,
       "strength": 0.5,
-      "reason": "ETH ETF approval drives broad crypto inflows"
+      "reason": "The approval of a spot Ethereum ETF could signal a bullish trend in the crypto market, positively influencing investor sentiment in equities, particularly tech stocks associated with crypto."
     },
     {
       "source_id": "tesla-q2-earnings",
       "source_type": "market",
       "target_id": "sp500-above-6000",
       "direction": 1,
-      "strength": 0.4,
-      "reason": "Mega-cap bellwether beat lifts index sentiment"
+      "strength": 0.7,
+      "reason": "Positive earnings from Tesla are likely to boost investor confidence, leading to higher equity valuations and a rise in the S&P 500."
     },
     {
       "source_id": "tesla-q2-earnings",
       "source_type": "market",
       "target_id": "nvidia-above-4t",
       "direction": 1,
-      "strength": 0.3,
-      "reason": "Tech confidence strengthens across the sector"
+      "strength": 0.6,
+      "reason": "Strong earnings from Tesla can positively influence the tech sector, benefiting Nvidia's market cap as investor sentiment improves."
     },
     {
       "source_id": "nvidia-above-4t",
       "source_type": "market",
       "target_id": "sp500-above-6000",
       "direction": 1,
-      "strength": 0.5,
-      "reason": "Largest index constituent pulls the index higher"
+      "strength": 0.7,
+      "reason": "A significant increase in Nvidia's market cap would likely boost investor confidence and valuations in the broader market, leading to a higher S&P 500 index."
     },
     {
       "source_id": "nvidia-above-4t",
       "source_type": "market",
-      "target_id": "btc-above-100k",
+      "target_id": "tesla-q2-earnings",
       "direction": 1,
-      "strength": 0.2,
-      "reason": "AI/GPU demand narrative spills into crypto mining"
-    },
-    {
-      "source_id": "china-tariffs",
-      "source_type": "market",
-      "target_id": "us-cpi-above-3-5",
-      "direction": 1,
-      "strength": 0.6,
-      "reason": "Tariff pass-through raises consumer prices"
+      "strength": 0.5,
+      "reason": "Nvidia's success may positively influence investor sentiment in the tech sector, benefiting other tech companies like Tesla."
     },
     {
       "source_id": "china-tariffs",
       "source_type": "market",
       "target_id": "us-recession-2026",
-      "direction": 1,
-      "strength": 0.5,
-      "reason": "Trade war dampens business investment and growth"
-    },
-    {
-      "source_id": "china-tariffs",
-      "source_type": "market",
-      "target_id": "tesla-q2-earnings",
       "direction": -1,
-      "strength": 0.5,
-      "reason": "Supply chain disruption and tariff costs squeeze margins"
+      "strength": 0.6,
+      "reason": "New tariffs on Chinese imports are likely to increase costs for US businesses, potentially leading to a slowdown in economic growth and increasing the risk of a recession."
     },
     {
       "source_id": "china-tariffs",
@@ -322,111 +306,119 @@
       "target_id": "sp500-above-6000",
       "direction": -1,
       "strength": 0.5,
-      "reason": "Trade escalation triggers broad market selloff"
+      "reason": "The imposition of new tariffs could negatively impact corporate earnings and investor sentiment, leading to a decrease in the S&P 500 index."
+    },
+    {
+      "source_id": "china-tariffs",
+      "source_type": "market",
+      "target_id": "oil-above-90",
+      "direction": 1,
+      "strength": 0.4,
+      "reason": "Increased tariffs may lead to higher production costs and inflation, which could drive up oil prices as companies pass on costs to consumers."
     },
     {
       "source_id": "crypto-regulation",
       "source_type": "market",
       "target_id": "btc-above-100k",
-      "direction": -1,
-      "strength": 0.5,
-      "reason": "Regulatory uncertainty weighs on crypto prices"
+      "direction": 1,
+      "strength": 0.7,
+      "reason": "The passage of comprehensive crypto regulation is likely to increase investor confidence and drive up the price of Bitcoin."
     },
     {
       "source_id": "crypto-regulation",
       "source_type": "market",
       "target_id": "eth-etf-approved",
-      "direction": -1,
+      "direction": 1,
       "strength": 0.6,
-      "reason": "New rules complicate the SEC approval process"
+      "reason": "Federal crypto regulation could facilitate the approval of a spot Ethereum ETF, boosting demand and price for Ethereum."
     },
     {
       "source_id": "midterms-flip-senate",
       "source_type": "market",
       "target_id": "china-tariffs",
       "direction": 1,
-      "strength": 0.4,
-      "reason": "Campaign rhetoric escalates trade-war posturing"
-    },
-    {
-      "source_id": "midterms-flip-senate",
-      "source_type": "market",
-      "target_id": "crypto-regulation",
-      "direction": 1,
-      "strength": 0.5,
-      "reason": "New Senate majority prioritizes crypto legislation"
-    },
-    {
-      "source_id": "midterms-flip-senate",
-      "source_type": "market",
-      "target_id": "oil-above-90",
-      "direction": 1,
-      "strength": 0.3,
-      "reason": "Geopolitical posturing disrupts energy markets"
+      "strength": 0.6,
+      "reason": "A Democratic Senate majority may lead to less aggressive trade policies, reducing the likelihood of new tariffs on China."
     },
     {
       "source_id": "drake-album",
       "source_type": "market",
       "target_id": "streaming-300m",
       "direction": 1,
-      "strength": 0.5,
-      "reason": "Blockbuster release drives a wave of new subscriptions"
+      "strength": 0.7,
+      "reason": "The release of a new Drake album is likely to increase interest and subscriptions in streaming platforms."
+    },
+    {
+      "source_id": "streaming-300m",
+      "source_type": "market",
+      "target_id": "sp500-above-6000",
+      "direction": 1,
+      "strength": 0.7,
+      "reason": "Increased subscriber growth for streaming platforms can boost investor sentiment and lead to higher equity valuations, particularly in tech stocks."
+    },
+    {
+      "source_id": "streaming-300m",
+      "source_type": "market",
+      "target_id": "tesla-q2-earnings",
+      "direction": 1,
+      "strength": 0.6,
+      "reason": "A surge in streaming platform subscribers can indicate a strong consumer economy, positively impacting earnings expectations for companies like Tesla."
     },
     {
       "source_id": "fed-dovish-signal",
       "source_type": "news",
       "target_id": "fed-rate-cut",
       "direction": 1,
-      "strength": 0.7,
-      "reason": "Dovish language raises probability of a rate cut"
+      "strength": 0.8,
+      "reason": "The Fed's dovish pivot increases the likelihood of a rate cut at the July FOMC meeting."
+    },
+    {
+      "source_id": "fed-dovish-signal",
+      "source_type": "news",
+      "target_id": "us-recession-2026",
+      "direction": -1,
+      "strength": 0.6,
+      "reason": "A dovish Fed signal suggests a more accommodative monetary policy, which may reduce the chances of a recession by the end of 2026."
     },
     {
       "source_id": "fed-dovish-signal",
       "source_type": "news",
       "target_id": "sp500-above-6000",
       "direction": 1,
-      "strength": 0.4,
-      "reason": "Dovish Fed supports equity valuations"
+      "strength": 0.7,
+      "reason": "Dovish signals from the Fed typically boost investor sentiment, increasing the likelihood of the S&P 500 exceeding 6,000."
     },
     {
       "source_id": "btc-etf-inflows",
       "source_type": "news",
       "target_id": "btc-above-100k",
       "direction": 1,
-      "strength": 0.6,
-      "reason": "Record inflows signal strong institutional demand"
+      "strength": 0.8,
+      "reason": "Record inflows into the Bitcoin ETF indicate increased investor confidence and demand for Bitcoin, raising the likelihood of its price exceeding $100,000."
     },
     {
       "source_id": "new-tariff-package",
       "source_type": "news",
       "target_id": "china-tariffs",
       "direction": 1,
-      "strength": 0.8,
-      "reason": "Direct confirmation of new tariff policy"
-    },
-    {
-      "source_id": "new-tariff-package",
-      "source_type": "news",
-      "target_id": "sp500-above-6000",
-      "direction": -1,
-      "strength": 0.4,
-      "reason": "Trade escalation weighs on broad equity sentiment"
+      "strength": 0.9,
+      "reason": "The announcement of a new tariff package directly confirms the likelihood of new tariffs being imposed on Chinese imports."
     },
     {
       "source_id": "tesla-price-cuts",
       "source_type": "news",
       "target_id": "tesla-q2-earnings",
-      "direction": -1,
-      "strength": 0.5,
-      "reason": "Price cuts compress margins and hurt profitability"
+      "direction": 1,
+      "strength": 0.8,
+      "reason": "Major price cuts are likely to boost sales and improve Tesla's earnings, increasing the probability of positive Q2 earnings."
     },
     {
       "source_id": "oil-supply-disruption",
       "source_type": "news",
       "target_id": "oil-above-90",
       "direction": 1,
-      "strength": 0.7,
-      "reason": "Supply disruption drives crude prices higher"
+      "strength": 0.8,
+      "reason": "The spike in oil prices due to Middle East supply disruption significantly increases the likelihood of oil prices exceeding $90 per barrel."
     }
   ]
 }

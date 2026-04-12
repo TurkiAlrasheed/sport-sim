@@ -2,11 +2,16 @@ from __future__ import annotations
 
 import os
 
+from dotenv import load_dotenv
+
+load_dotenv()
+
 import pandas as pd
 import streamlit as st
 
 from data import fetch_news
-from simulation import classify_trade_signal, generate_agents
+from simulation import classify_trade_signal, generate_agents, simulate_all
+from utils import get_state, news_edges_for_market
 
 
 PRESET_EVENTS = {
@@ -65,6 +70,8 @@ report_env_var_status()
 
 st.title("Event Intelligence Terminal")
 st.caption("Simulates how diverse market personas react to news, surfaces BUY / SELL / HOLD signals per market.")
+
+
 
 state = get_state()
 
