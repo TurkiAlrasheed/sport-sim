@@ -1,0 +1,432 @@
+{
+  "markets": [
+    {
+      "id": "fed-rate-cut",
+      "name": "Fed cuts rates 25+ bps at July FOMC",
+      "description": "Fed cuts rates by 25 bps at the July FOMC meeting",
+      "category": "macro",
+      "market_probability": 0.44
+    },
+    {
+      "id": "us-cpi-above-3-5",
+      "name": "US CPI above 3.5% for June 2026",
+      "description": "US CPI inflation prints above 3.5% for June 2026",
+      "category": "macro",
+      "market_probability": 0.30
+    },
+    {
+      "id": "us-recession-2026",
+      "name": "US recession by end of 2026",
+      "description": "US economy enters recession by end of 2026",
+      "category": "macro",
+      "market_probability": 0.22
+    },
+    {
+      "id": "sp500-above-6000",
+      "name": "S&P 500 above 6,000 on July 1",
+      "description": "S&P 500 index closes above 6,000 on July 1 2026",
+      "category": "markets",
+      "market_probability": 0.55
+    },
+    {
+      "id": "oil-above-90",
+      "name": "Oil above $90/barrel by August 2026",
+      "description": "WTI crude oil above $90 per barrel by August 2026",
+      "category": "markets",
+      "market_probability": 0.33
+    },
+    {
+      "id": "btc-above-100k",
+      "name": "Bitcoin above $100K on July 1",
+      "description": "Bitcoin price above $100,000 on July 1 2026",
+      "category": "crypto",
+      "market_probability": 0.48
+    },
+    {
+      "id": "eth-etf-approved",
+      "name": "Spot Ethereum ETF approved in 2026",
+      "description": "SEC approves a spot Ethereum ETF by end of 2026",
+      "category": "crypto",
+      "market_probability": 0.40
+    },
+    {
+      "id": "tesla-q2-earnings",
+      "name": "Tesla reports positive Q2 2026 earnings",
+      "description": "Tesla reports positive earnings for Q2 2026",
+      "category": "company",
+      "market_probability": 0.62
+    },
+    {
+      "id": "nvidia-above-4t",
+      "name": "Nvidia market cap above $4T by Q3 2026",
+      "description": "Nvidia market cap exceeds $4 trillion by end of Q3 2026",
+      "category": "company",
+      "market_probability": 0.45
+    },
+    {
+      "id": "china-tariffs",
+      "name": "New China tariffs imposed by July 2026",
+      "description": "US imposes new tariffs on Chinese imports by July 2026",
+      "category": "policy",
+      "market_probability": 0.52
+    },
+    {
+      "id": "crypto-regulation",
+      "name": "Federal crypto regulation bill passed in 2026",
+      "description": "Congress passes a comprehensive crypto regulation bill in 2026",
+      "category": "policy",
+      "market_probability": 0.28
+    },
+    {
+      "id": "midterms-flip-senate",
+      "name": "2026 midterms flip the Senate",
+      "description": "2026 midterm elections flip Senate majority",
+      "category": "policy",
+      "market_probability": 0.46
+    },
+    {
+      "id": "drake-album",
+      "name": "Drake releases album by summer 2026",
+      "description": "Drake releases a new studio album by summer 2026",
+      "category": "culture",
+      "market_probability": 0.58
+    },
+    {
+      "id": "streaming-300m",
+      "name": "Streaming platform exceeds 300M subs in 2026",
+      "description": "A streaming platform exceeds 300 million subscribers in 2026",
+      "category": "culture",
+      "market_probability": 0.42
+    }
+  ],
+  "news": [
+    {
+      "id": "fed-dovish-signal",
+      "headline": "Fed signals dovish pivot at latest press conference",
+      "category": "macro",
+      "timestamp": "2026-04-10"
+    },
+    {
+      "id": "btc-etf-inflows",
+      "headline": "Bitcoin ETF sees record daily inflows of $1.2B",
+      "category": "crypto",
+      "timestamp": "2026-04-11"
+    },
+    {
+      "id": "new-tariff-package",
+      "headline": "New tariff package announced targeting Chinese tech imports",
+      "category": "policy",
+      "timestamp": "2026-04-09"
+    },
+    {
+      "id": "tesla-price-cuts",
+      "headline": "Tesla announces major price cuts across all models",
+      "category": "company",
+      "timestamp": "2026-04-08"
+    },
+    {
+      "id": "oil-supply-disruption",
+      "headline": "Oil prices spike on Middle East supply disruption",
+      "category": "markets",
+      "timestamp": "2026-04-07"
+    }
+  ],
+  "edges": [
+    {
+      "source_id": "fed-rate-cut",
+      "source_type": "market",
+      "target_id": "sp500-above-6000",
+      "direction": 1,
+      "strength": 0.7,
+      "reason": "Rate cuts lower discount rates and lift equities"
+    },
+    {
+      "source_id": "fed-rate-cut",
+      "source_type": "market",
+      "target_id": "btc-above-100k",
+      "direction": 1,
+      "strength": 0.6,
+      "reason": "Liquidity boost flows into risk assets"
+    },
+    {
+      "source_id": "fed-rate-cut",
+      "source_type": "market",
+      "target_id": "us-cpi-above-3-5",
+      "direction": 1,
+      "strength": 0.4,
+      "reason": "Easing could reignite price pressures"
+    },
+    {
+      "source_id": "us-cpi-above-3-5",
+      "source_type": "market",
+      "target_id": "fed-rate-cut",
+      "direction": -1,
+      "strength": 0.9,
+      "reason": "Hot inflation forces the Fed to hold or hike"
+    },
+    {
+      "source_id": "us-cpi-above-3-5",
+      "source_type": "market",
+      "target_id": "us-recession-2026",
+      "direction": 1,
+      "strength": 0.4,
+      "reason": "Stagflation risk rises as real incomes erode"
+    },
+    {
+      "source_id": "us-recession-2026",
+      "source_type": "market",
+      "target_id": "fed-rate-cut",
+      "direction": 1,
+      "strength": 0.8,
+      "reason": "Fed responds to economic weakness with easing"
+    },
+    {
+      "source_id": "us-recession-2026",
+      "source_type": "market",
+      "target_id": "tesla-q2-earnings",
+      "direction": -1,
+      "strength": 0.6,
+      "reason": "Consumer spending drops hurt auto demand"
+    },
+    {
+      "source_id": "us-recession-2026",
+      "source_type": "market",
+      "target_id": "sp500-above-6000",
+      "direction": -1,
+      "strength": 0.8,
+      "reason": "Risk-off selloff drags the index"
+    },
+    {
+      "source_id": "us-recession-2026",
+      "source_type": "market",
+      "target_id": "oil-above-90",
+      "direction": -1,
+      "strength": 0.5,
+      "reason": "Demand destruction pushes crude prices down"
+    },
+    {
+      "source_id": "sp500-above-6000",
+      "source_type": "market",
+      "target_id": "btc-above-100k",
+      "direction": 1,
+      "strength": 0.4,
+      "reason": "Broad risk-on appetite spills into crypto"
+    },
+    {
+      "source_id": "sp500-above-6000",
+      "source_type": "market",
+      "target_id": "nvidia-above-4t",
+      "direction": 1,
+      "strength": 0.5,
+      "reason": "Index rally lifts its largest constituents"
+    },
+    {
+      "source_id": "oil-above-90",
+      "source_type": "market",
+      "target_id": "us-cpi-above-3-5",
+      "direction": 1,
+      "strength": 0.6,
+      "reason": "Energy costs feed directly into headline CPI"
+    },
+    {
+      "source_id": "oil-above-90",
+      "source_type": "market",
+      "target_id": "us-recession-2026",
+      "direction": 1,
+      "strength": 0.4,
+      "reason": "Oil shock acts as a tax on consumers and businesses"
+    },
+    {
+      "source_id": "oil-above-90",
+      "source_type": "market",
+      "target_id": "tesla-q2-earnings",
+      "direction": 1,
+      "strength": 0.3,
+      "reason": "High gas prices accelerate EV adoption"
+    },
+    {
+      "source_id": "btc-above-100k",
+      "source_type": "market",
+      "target_id": "eth-etf-approved",
+      "direction": 1,
+      "strength": 0.4,
+      "reason": "Bitcoin milestone strengthens institutional crypto narrative"
+    },
+    {
+      "source_id": "eth-etf-approved",
+      "source_type": "market",
+      "target_id": "btc-above-100k",
+      "direction": 1,
+      "strength": 0.5,
+      "reason": "ETH ETF approval drives broad crypto inflows"
+    },
+    {
+      "source_id": "tesla-q2-earnings",
+      "source_type": "market",
+      "target_id": "sp500-above-6000",
+      "direction": 1,
+      "strength": 0.4,
+      "reason": "Mega-cap bellwether beat lifts index sentiment"
+    },
+    {
+      "source_id": "tesla-q2-earnings",
+      "source_type": "market",
+      "target_id": "nvidia-above-4t",
+      "direction": 1,
+      "strength": 0.3,
+      "reason": "Tech confidence strengthens across the sector"
+    },
+    {
+      "source_id": "nvidia-above-4t",
+      "source_type": "market",
+      "target_id": "sp500-above-6000",
+      "direction": 1,
+      "strength": 0.5,
+      "reason": "Largest index constituent pulls the index higher"
+    },
+    {
+      "source_id": "nvidia-above-4t",
+      "source_type": "market",
+      "target_id": "btc-above-100k",
+      "direction": 1,
+      "strength": 0.2,
+      "reason": "AI/GPU demand narrative spills into crypto mining"
+    },
+    {
+      "source_id": "china-tariffs",
+      "source_type": "market",
+      "target_id": "us-cpi-above-3-5",
+      "direction": 1,
+      "strength": 0.6,
+      "reason": "Tariff pass-through raises consumer prices"
+    },
+    {
+      "source_id": "china-tariffs",
+      "source_type": "market",
+      "target_id": "us-recession-2026",
+      "direction": 1,
+      "strength": 0.5,
+      "reason": "Trade war dampens business investment and growth"
+    },
+    {
+      "source_id": "china-tariffs",
+      "source_type": "market",
+      "target_id": "tesla-q2-earnings",
+      "direction": -1,
+      "strength": 0.5,
+      "reason": "Supply chain disruption and tariff costs squeeze margins"
+    },
+    {
+      "source_id": "china-tariffs",
+      "source_type": "market",
+      "target_id": "sp500-above-6000",
+      "direction": -1,
+      "strength": 0.5,
+      "reason": "Trade escalation triggers broad market selloff"
+    },
+    {
+      "source_id": "crypto-regulation",
+      "source_type": "market",
+      "target_id": "btc-above-100k",
+      "direction": -1,
+      "strength": 0.5,
+      "reason": "Regulatory uncertainty weighs on crypto prices"
+    },
+    {
+      "source_id": "crypto-regulation",
+      "source_type": "market",
+      "target_id": "eth-etf-approved",
+      "direction": -1,
+      "strength": 0.6,
+      "reason": "New rules complicate the SEC approval process"
+    },
+    {
+      "source_id": "midterms-flip-senate",
+      "source_type": "market",
+      "target_id": "china-tariffs",
+      "direction": 1,
+      "strength": 0.4,
+      "reason": "Campaign rhetoric escalates trade-war posturing"
+    },
+    {
+      "source_id": "midterms-flip-senate",
+      "source_type": "market",
+      "target_id": "crypto-regulation",
+      "direction": 1,
+      "strength": 0.5,
+      "reason": "New Senate majority prioritizes crypto legislation"
+    },
+    {
+      "source_id": "midterms-flip-senate",
+      "source_type": "market",
+      "target_id": "oil-above-90",
+      "direction": 1,
+      "strength": 0.3,
+      "reason": "Geopolitical posturing disrupts energy markets"
+    },
+    {
+      "source_id": "drake-album",
+      "source_type": "market",
+      "target_id": "streaming-300m",
+      "direction": 1,
+      "strength": 0.5,
+      "reason": "Blockbuster release drives a wave of new subscriptions"
+    },
+    {
+      "source_id": "fed-dovish-signal",
+      "source_type": "news",
+      "target_id": "fed-rate-cut",
+      "direction": 1,
+      "strength": 0.7,
+      "reason": "Dovish language raises probability of a rate cut"
+    },
+    {
+      "source_id": "fed-dovish-signal",
+      "source_type": "news",
+      "target_id": "sp500-above-6000",
+      "direction": 1,
+      "strength": 0.4,
+      "reason": "Dovish Fed supports equity valuations"
+    },
+    {
+      "source_id": "btc-etf-inflows",
+      "source_type": "news",
+      "target_id": "btc-above-100k",
+      "direction": 1,
+      "strength": 0.6,
+      "reason": "Record inflows signal strong institutional demand"
+    },
+    {
+      "source_id": "new-tariff-package",
+      "source_type": "news",
+      "target_id": "china-tariffs",
+      "direction": 1,
+      "strength": 0.8,
+      "reason": "Direct confirmation of new tariff policy"
+    },
+    {
+      "source_id": "new-tariff-package",
+      "source_type": "news",
+      "target_id": "sp500-above-6000",
+      "direction": -1,
+      "strength": 0.4,
+      "reason": "Trade escalation weighs on broad equity sentiment"
+    },
+    {
+      "source_id": "tesla-price-cuts",
+      "source_type": "news",
+      "target_id": "tesla-q2-earnings",
+      "direction": -1,
+      "strength": 0.5,
+      "reason": "Price cuts compress margins and hurt profitability"
+    },
+    {
+      "source_id": "oil-supply-disruption",
+      "source_type": "news",
+      "target_id": "oil-above-90",
+      "direction": 1,
+      "strength": 0.7,
+      "reason": "Supply disruption drives crude prices higher"
+    }
+  ]
+}
