@@ -6,7 +6,7 @@ from pathlib import Path
 import pandas as pd
 import streamlit as st
 
-from simulation import simulate_all
+from simulation import simulate_all, simulate_market
 from utils import get_state, news_edges_for_market
 
 
@@ -66,11 +66,16 @@ with st.sidebar:
     randomness = st.slider("Agent randomness", min_value=0.0, max_value=0.35, value=0.12, step=0.01)
     seed = st.number_input("Random seed", min_value=0, max_value=9999, value=7, step=1)
     threshold_pct = st.slider("Trade threshold (%)", min_value=1, max_value=20, value=5)
+    detail_agent_engine = st.radio(
+        "Drill-down agent engine",
+        ["Heuristic", "AI agents"],
+        help="Overview remains heuristic. AI agents run only for the selected market drill-down to keep cost and latency reasonable.",
+    )
 
     if not os.getenv("NEWSAPI_KEY"):
         st.caption("`NEWSAPI_KEY` not set. Stored news in the app still works.")
     if not os.getenv("OPENAI_API_KEY"):
-        st.caption("`OPENAI_API_KEY` not set. LLM score falls back to `0.02`.")
+        st.caption("`OPENAI_API_KEY` not set. Hybrid scoring falls back to `0.02` and AI agents degrade to heuristics.")
 
     run = st.button("Run all simulations", type="primary", use_container_width=True)
 
@@ -126,6 +131,8 @@ col4.metric("HOLD", hold_count)
 
 st.divider()
 st.subheader("Market Drill-Down")
+if detail_agent_engine == "AI agents":
+    st.caption("Selected market is being re-simulated with two LLM agent rounds. The overview table above is still heuristic.")
 
 market_names = [market["name"] for market in state["markets"]]
 selected_name = st.selectbox("Select a market to inspect", market_names)
@@ -136,7 +143,55 @@ if selected_result is None:
     st.stop()
 
 market = selected_result["market"]
+if detail_agent_engine == "AI agents":
+    news_edges = news_edges_for_market(state, market["id"])
+    news_by_id = {news["id"]: news for news in state["news"]}
+    linked_news_items = [
+        news_by_id[edge["source_id"]]
+        for edge in news_edges
+        if edge["source_id"] in news_by_id
+    ]
+    llm_cache_key = (
+        market["id"],
+        agent_count,
+        round(randomness, 4),
+        int(seed),
+        threshold_pct,
+        bool(os.getenv("OPENAI_API_KEY")),
+        tuple(
+            (
+                edge["source_id"],
+                edge["direction"],
+                edge["strength"],
+                edge.get("reason", ""),
+            )
+            for edge in news_edges
+        ),
+        tuple(news["headline"] for news in linked_news_items),
+    )
+    if st.session_state.get("llm_detail_key") != llm_cache_key:
+        with st.spinner("Running AI-agent drill-down..."):
+            st.session_state.llm_detail_result = simulate_market(
+                market=market,
+                news_items=linked_news_items,
+                news_edges=news_edges,
+                agent_count=agent_count,
+                randomness=randomness,
+                seed=int(seed),
+                threshold=threshold_pct / 100,
+                mode="llm_agents",
+            )
+            st.session_state.llm_detail_key = llm_cache_key
+    selected_result = st.session_state.llm_detail_result
+
 st.markdown(f"**{market['name']}** — _{market['description']}_")
+
+llm_error = selected_result.get("llm_error")
+if detail_agent_engine == "AI agents" and llm_error:
+    st.warning(f"AI agent issue: {llm_error}")
+    if st.session_state.get("_last_llm_error_reported") != llm_error:
+        print(f"[llm_agents] {llm_error}")
+        st.session_state["_last_llm_error_reported"] = llm_error
 
 m1, m2, m3, m4 = st.columns(4)
 m1.metric("Sentiment", f"{selected_result['aggregate_sentiment']:+.3f}")
@@ -175,6 +230,7 @@ left_col, right_col = st.columns([1.2, 1])
 
 with left_col:
     st.subheader("Simulation Summary")
+    st.write(f"**Agent engine:** {selected_result.get('agent_backend', 'heuristic')}")
     st.write(f"**Detected topics:** {', '.join(selected_result['topics'])}")
     st.write(f"**Rule score:** {selected_result['rule_score']:+.2f}")
     st.write(f"**LLM score:** {selected_result['llm_score']:+.2f}")
@@ -202,6 +258,8 @@ agent_rows = [
         "Agent": agent.name,
         "Role": agent.role,
         "Sentiment": round(agent.sentiment, 3),
+        "Confidence": round(agent.confidence, 2) if agent.confidence is not None else None,
+        "Source": agent.source,
         "Narrative": agent.narrative,
     }
     for agent in selected_result["agents"]
