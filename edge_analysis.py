@@ -6,6 +6,8 @@ from typing import Any
 
 from openai import OpenAI
 
+from utils import add_edge, save_state
+
 _NEWS_SYSTEM_PROMPT = """\
 You are an expert prediction-market analyst. Given a real-world news headline \
 and a list of prediction markets, determine which markets are materially \
@@ -203,3 +205,74 @@ def generate_all_market_edges(
                 seen.add(pair)
                 all_edges.append(edge)
     return all_edges
+
+
+# ── State-mutating helpers ────────────────────────────────────────────────
+
+
+def _apply_edges(state: dict[str, list], edges: list[dict[str, Any]]) -> int:
+    """Deduplicate *edges* against state, add new ones, and persist.
+
+    Returns the number of edges actually added.
+    """
+    existing_pairs = {
+        (e["source_id"], e["target_id"]) for e in state["edges"]
+    }
+    added = 0
+    for edge in edges:
+        pair = (edge["source_id"], edge["target_id"])
+        if pair not in existing_pairs:
+            add_edge(state, edge)
+            existing_pairs.add(pair)
+            added += 1
+    if added:
+        save_state(state)
+    return added
+
+
+def apply_news_edges(
+    state: dict[str, list],
+    news: dict[str, Any],
+) -> int:
+    """Generate news→market edges and persist them. Returns count added."""
+    edges = generate_news_edges(news, state["markets"])
+    return _apply_edges(state, edges)
+
+
+def apply_market_edges(
+    state: dict[str, list],
+    source_market: dict[str, Any],
+) -> int:
+    """Generate market→market edges and persist them. Returns count added."""
+    edges = generate_market_edges(source_market, state["markets"])
+    return _apply_edges(state, edges)
+
+
+def apply_all_news_edges(state: dict[str, list]) -> int:
+    """Regenerate all news→market edges: clears existing, generates fresh, persists.
+
+    Returns the total number of edges added.
+    """
+    state["edges"] = [e for e in state["edges"] if e["source_type"] != "news"]
+    all_edges: list[dict[str, Any]] = []
+    for news in state["news"]:
+        all_edges.extend(generate_news_edges(news, state["markets"]))
+    return _apply_edges(state, all_edges)
+
+
+def apply_all_market_edges(state: dict[str, list]) -> int:
+    """Regenerate all market→market edges: clears existing, generates fresh, persists.
+
+    Returns the total number of edges added.
+    """
+    state["edges"] = [e for e in state["edges"] if e["source_type"] != "market"]
+    all_edges: list[dict[str, Any]] = []
+    seen: set[tuple[str, str]] = set()
+    for market in state["markets"]:
+        edges = generate_market_edges(market, state["markets"])
+        for edge in edges:
+            pair = (edge["source_id"], edge["target_id"])
+            if pair not in seen:
+                seen.add(pair)
+                all_edges.append(edge)
+    return _apply_edges(state, all_edges)

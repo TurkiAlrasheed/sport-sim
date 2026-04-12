@@ -9,10 +9,9 @@ load_dotenv()
 import pandas as pd
 import streamlit as st
 
-from edge_analysis import generate_market_edges
+from edge_analysis import apply_market_edges
 from utils import (
     CATEGORIES,
-    add_edge,
     add_market,
     get_state,
     persist,
@@ -64,20 +63,11 @@ with st.expander("Add new market", expanded=False):
                 if os.environ.get("OPENAI_API_KEY") and len(state["markets"]) >= 2:
                     try:
                         with st.spinner("Analyzing market relationships with AI..."):
-                            edges = generate_market_edges(market_obj, state["markets"])
-                        for edge in edges:
-                            existing = any(
-                                e["source_id"] == edge["source_id"]
-                                and e["target_id"] == edge["target_id"]
-                                for e in state["edges"]
-                            )
-                            if not existing:
-                                add_edge(state, edge)
-                        persist()
-                        if edges:
+                            added = apply_market_edges(state, market_obj)
+                        if added:
                             st.success(
-                                f"AI generated {len(edges)} market→market "
-                                f"edge{'s' if len(edges) != 1 else ''}."
+                                f"AI generated {added} market→market "
+                                f"edge{'s' if added != 1 else ''}."
                             )
                         else:
                             st.info("AI found no causal links to other markets.")

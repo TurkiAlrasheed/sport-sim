@@ -370,7 +370,7 @@
       "target_id": "fed-rate-cut",
       "direction": 1,
       "strength": 0.8,
-      "reason": "The Fed's dovish pivot increases the likelihood of a rate cut at the July FOMC meeting."
+      "reason": "The Fed's dovish pivot increases the likelihood of a rate cut at the upcoming FOMC meeting."
     },
     {
       "source_id": "fed-dovish-signal",
@@ -378,15 +378,7 @@
       "target_id": "us-recession-2026",
       "direction": -1,
       "strength": 0.6,
-      "reason": "A dovish Fed signal suggests a more accommodative monetary policy, which may reduce the chances of a recession by the end of 2026."
-    },
-    {
-      "source_id": "fed-dovish-signal",
-      "source_type": "news",
-      "target_id": "sp500-above-6000",
-      "direction": 1,
-      "strength": 0.7,
-      "reason": "Dovish signals from the Fed typically boost investor sentiment, increasing the likelihood of the S&P 500 exceeding 6,000."
+      "reason": "A dovish Fed signal may reduce fears of an imminent recession, thus decreasing the probability of a recession by the end of 2026."
     },
     {
       "source_id": "btc-etf-inflows",
@@ -394,7 +386,7 @@
       "target_id": "btc-above-100k",
       "direction": 1,
       "strength": 0.8,
-      "reason": "Record inflows into the Bitcoin ETF indicate increased investor confidence and demand for Bitcoin, raising the likelihood of its price exceeding $100,000."
+      "reason": "Record inflows into Bitcoin ETFs indicate increased demand for Bitcoin, raising the likelihood of its price exceeding $100,000."
     },
     {
       "source_id": "new-tariff-package",
@@ -410,14 +402,14 @@
       "target_id": "tesla-q2-earnings",
       "direction": 1,
       "strength": 0.8,
-      "reason": "Major price cuts are likely to boost sales and improve Tesla's earnings, increasing the probability of positive Q2 earnings."
+      "reason": "Major price cuts are likely to boost sales and improve Tesla's earnings, increasing the probability of positive Q2 2026 earnings."
     },
     {
       "source_id": "oil-supply-disruption",
       "source_type": "news",
       "target_id": "oil-above-90",
       "direction": 1,
-      "strength": 0.8,
+      "strength": 0.9,
       "reason": "The spike in oil prices due to Middle East supply disruption significantly increases the likelihood of oil prices exceeding $90 per barrel."
     }
   ]

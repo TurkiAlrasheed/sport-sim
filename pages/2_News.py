@@ -10,10 +10,9 @@ load_dotenv()
 import pandas as pd
 import streamlit as st
 
-from edge_analysis import generate_news_edges
+from edge_analysis import apply_news_edges
 from utils import (
     CATEGORIES,
-    add_edge,
     add_news,
     get_state,
     persist,
@@ -59,20 +58,11 @@ with st.expander("Add new news event", expanded=False):
                 if os.environ.get("OPENAI_API_KEY") and state["markets"]:
                     try:
                         with st.spinner("Analyzing headline with AI..."):
-                            edges = generate_news_edges(news_obj, state["markets"])
-                        for edge in edges:
-                            existing = any(
-                                e["source_id"] == edge["source_id"]
-                                and e["target_id"] == edge["target_id"]
-                                for e in state["edges"]
-                            )
-                            if not existing:
-                                add_edge(state, edge)
-                        persist()
-                        if edges:
+                            added = apply_news_edges(state, news_obj)
+                        if added:
                             st.success(
-                                f"AI generated {len(edges)} dependency "
-                                f"edge{'s' if len(edges) != 1 else ''}."
+                                f"AI generated {added} dependency "
+                                f"edge{'s' if added != 1 else ''}."
                             )
                         else:
                             st.info("AI found no relevant market connections for this headline.")

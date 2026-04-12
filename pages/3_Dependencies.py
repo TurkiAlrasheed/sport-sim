@@ -14,7 +14,7 @@ except ImportError:
     agraph = None
     Config = Edge = Node = None
 
-from edge_analysis import generate_market_edges, generate_news_edges
+from edge_analysis import apply_market_edges, apply_news_edges
 from utils import (
     add_edge,
     find_market,
@@ -22,6 +22,7 @@ from utils import (
     get_state,
     persist,
     remove_edge,
+    save_state,
 )
 
 st.set_page_config(page_title="Dependency Graph", page_icon=":link:", layout="wide")
@@ -167,6 +168,7 @@ else:
 
     if regen_news:
         state["edges"] = [e for e in state["edges"] if e["source_type"] != "news"]
+        save_state(state)
         progress = st.progress(0, text="Generating news edges...")
         total = 0
         for i, news in enumerate(state["news"]):
@@ -175,51 +177,27 @@ else:
                 text=f"Analyzing: {news['headline'][:60]}...",
             )
             try:
-                edges = generate_news_edges(news, state["markets"])
-                for edge in edges:
-                    existing = any(
-                        e["source_id"] == edge["source_id"]
-                        and e["target_id"] == edge["target_id"]
-                        for e in state["edges"]
-                    )
-                    if not existing:
-                        add_edge(state, edge)
-                        total += 1
+                total += apply_news_edges(state, news)
             except Exception as exc:
                 st.warning(f"Failed for \"{news['headline'][:40]}...\": {exc}")
-        persist()
         progress.empty()
         st.success(f"Generated **{total}** news→market edge(s).")
         st.rerun()
 
     if regen_markets:
         state["edges"] = [e for e in state["edges"] if e["source_type"] != "market"]
+        save_state(state)
         progress = st.progress(0, text="Generating market edges...")
         total = 0
-        seen: set[tuple[str, str]] = set()
         for i, market in enumerate(state["markets"]):
             progress.progress(
                 (i + 1) / market_count,
                 text=f"Analyzing: {market['name'][:60]}...",
             )
             try:
-                edges = generate_market_edges(market, state["markets"])
-                for edge in edges:
-                    pair = (edge["source_id"], edge["target_id"])
-                    if pair in seen:
-                        continue
-                    seen.add(pair)
-                    existing = any(
-                        e["source_id"] == edge["source_id"]
-                        and e["target_id"] == edge["target_id"]
-                        for e in state["edges"]
-                    )
-                    if not existing:
-                        add_edge(state, edge)
-                        total += 1
+                total += apply_market_edges(state, market)
             except Exception as exc:
                 st.warning(f"Failed for \"{market['name'][:40]}...\": {exc}")
-        persist()
         progress.empty()
         st.success(f"Generated **{total}** market→market edge(s).")
         st.rerun()
