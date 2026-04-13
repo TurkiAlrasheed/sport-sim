@@ -6,6 +6,7 @@ from pathlib import Path
 import pandas as pd
 import streamlit as st
 
+from backtest import run_backtest
 from model import test_openai_connectivity
 from simulation import simulate_all, simulate_market
 from utils import get_state, news_edges_for_market
@@ -63,7 +64,7 @@ if not state["markets"]:
 
 with st.sidebar:
     st.header("Simulation")
-    agent_count = st.slider("Number of agents", min_value=5, max_value=20, value=8)
+    agent_count = st.slider("Number of agents", min_value=5, max_value=100, value=8)
     randomness = st.slider("Agent randomness", min_value=0.0, max_value=0.35, value=0.12, step=0.01)
     seed = st.number_input("Random seed", min_value=0, max_value=9999, value=7, step=1)
     threshold_pct = st.slider("Trade threshold (%)", min_value=1, max_value=20, value=5)
@@ -292,3 +293,35 @@ with chart_col:
 with table_col:
     st.write("**Agent Detail**")
     st.dataframe(agents_df, use_container_width=True, hide_index=True)
+
+st.divider()
+st.subheader("📊 Backtest Results")
+st.caption("Runs the existing event pipeline on 10 headlines per day across the last 10 days and scores it against an LLM-based actual-outcome proxy.")
+
+if st.button("Run 100-event backtest", key="run_backtest_button"):
+    with st.spinner("Running backtest..."):
+        st.session_state.backtest_result = run_backtest(days=10, headlines_per_day=10)
+
+backtest_result = st.session_state.get("backtest_result")
+if backtest_result:
+    b1, b2, b3 = st.columns(3)
+    b1.metric("Accuracy", f"{backtest_result['accuracy'] * 100:.1f}%")
+    b2.metric("Average Reward", f"{backtest_result['avg_reward']:.3f}")
+    b3.metric("Events Tested", backtest_result["total_events"])
+
+    backtest_rows = [
+        {
+            "Event": row["event"],
+            "Pred Prob": round(row["pred_prob"], 3),
+            "Actual": row["actual"],
+            "Reward": round(row["reward"], 3),
+        }
+        for row in backtest_result["results"]
+    ]
+    st.dataframe(
+        pd.DataFrame(backtest_rows),
+        use_container_width=True,
+        hide_index=True,
+    )
+else:
+    st.info("Run the backtest to evaluate the model on recent headlines.")

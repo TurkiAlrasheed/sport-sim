@@ -73,12 +73,12 @@ Dependency Edge
 ## Key Concepts
 
 ### Persona Templates (`simulation.py`)
-Ten archetypes: Optimist, Pessimist, Macro Trader, Economist, Retail Investor, Momentum Chaser, Contrarian, Policy Wonk, Crypto Degenerate, Entertainment Fan. Each has:
+Twenty archetypes: Optimist, Pessimist, Macro Trader, Economist, Retail Investor, Momentum Chaser, Contrarian, Policy Wonk, Crypto Degenerate, Entertainment Fan, Value Investor, Day Trader, Hedge Fund Manager, Social Media Influencer, Academic Researcher, Risk Manager, Speculator, Financial Analyst, Activist Investor, Global Investor. Each has:
 - **base_bias** — intrinsic bullish/bearish lean (e.g. Optimist +0.12, Pessimist −0.12)
-- **volatility** — scales the noise term (0.08–0.16)
+- **volatility** — scales the noise term (0.06–0.18)
 - **topic_tilts** — dict mapping topic → sentiment modifier (e.g. Crypto Degenerate gets +0.18 on "crypto")
 
-Agents are selected round-robin from templates, shuffled per seed, up to the configured `agent_count` (5–20).
+Agents are selected round-robin from templates, shuffled per seed, up to the configured `agent_count` (5–100).
 
 ### Event Scoring (`score_event_text`)
 Two-tier keyword lookup on headline text:

@@ -378,7 +378,7 @@
       "target_id": "us-recession-2026",
       "direction": -1,
       "strength": 0.6,
-      "reason": "A dovish Fed signal suggests a more accommodative monetary policy, which may reduce the chances of a recession by the end of 2026."
+      "reason": "A dovish pivot may indicate a more accommodative monetary policy, reducing the likelihood of a recession."
     },
     {
       "source_id": "fed-dovish-signal",
@@ -386,7 +386,7 @@
       "target_id": "sp500-above-6000",
       "direction": 1,
       "strength": 0.7,
-      "reason": "Dovish signals from the Fed typically boost investor sentiment, increasing the likelihood of the S&P 500 exceeding 6,000."
+      "reason": "Dovish signals from the Fed can boost investor confidence, increasing the chances of the S&P 500 exceeding 6,000."
     },
     {
       "source_id": "btc-etf-inflows",
@@ -394,7 +394,7 @@
       "target_id": "btc-above-100k",
       "direction": 1,
       "strength": 0.8,
-      "reason": "Record inflows into the Bitcoin ETF indicate increased investor confidence and demand for Bitcoin, raising the likelihood of its price exceeding $100,000."
+      "reason": "Record inflows into Bitcoin ETF indicate increased demand for Bitcoin, raising the likelihood of its price exceeding $100K."
     },
     {
       "source_id": "new-tariff-package",
@@ -410,7 +410,7 @@
       "target_id": "tesla-q2-earnings",
       "direction": 1,
       "strength": 0.8,
-      "reason": "Major price cuts are likely to boost sales and improve Tesla's earnings, increasing the probability of positive Q2 earnings."
+      "reason": "Major price cuts are likely to boost Tesla's sales, increasing the probability of positive earnings for Q2 2026."
     },
     {
       "source_id": "oil-supply-disruption",
@@ -418,7 +418,7 @@
       "target_id": "oil-above-90",
       "direction": 1,
       "strength": 0.8,
-      "reason": "The spike in oil prices due to Middle East supply disruption significantly increases the likelihood of oil prices exceeding $90 per barrel."
+      "reason": "The spike in oil prices due to Middle East supply disruption directly increases the likelihood of oil prices exceeding $90 per barrel."
     }
   ]
 }

@@ -123,7 +123,6 @@ def _chat_completion(
                 "temperature": temperature,
                 "max_tokens": max_tokens,
                 "messages": messages,
-                "response_format": {"type": "json_object"},
             },
             timeout=REQUEST_TIMEOUT_SECONDS,
         )
@@ -214,6 +213,52 @@ def get_event_score_llm(event: str, api_key: str | None = None) -> float:
         return DEFAULT_EVENT_FALLBACK
 
 
+def get_actual_outcome(event: str, api_key: str | None = None) -> int:
+    if not event.strip():
+        return 0
+
+    content = _chat_completion(
+        api_key=api_key,
+        temperature=0.0,
+        max_tokens=24,
+        cache_namespace="actual-outcome",
+        cache_payload={"event": event},
+        messages=[
+            {
+                "role": "system",
+                "content": (
+                    "You classify whether a headline implies a positive realized market-style outcome. "
+                    "Return strict JSON with one key named actual. "
+                    "actual must be 1 for positive / likely happened favorable outcome, "
+                    "or 0 for negative / unfavorable / did not happen."
+                ),
+            },
+            {
+                "role": "user",
+                "content": f"Headline: {event}",
+            },
+        ],
+    )
+    if not content:
+        lowered = event.lower()
+        negative_markers = (
+            "falls", "drop", "drops", "misses", "miss", "fear", "fears",
+            "cuts guidance", "lawsuit", "investigation", "higher for longer",
+            "slip", "warns", "weaker",
+        )
+        return 0 if any(marker in lowered for marker in negative_markers) else 1
+
+    payload = _extract_json_object(content)
+    if payload is None:
+        return 0
+
+    actual = payload.get("actual", 0)
+    try:
+        return 1 if int(actual) == 1 else 0
+    except (TypeError, ValueError):
+        return 0
+
+
 def summarize_agent_round(agent_rows: list[dict[str, Any]]) -> str:
     if not agent_rows:
         return "No prior agent reactions."
@@ -297,7 +342,8 @@ def get_agent_round_llm(
 
     parsed = _extract_json_object(content)
     if parsed is None:
-        _set_last_llm_error(f"Agent round {round_index} returned invalid JSON.")
+        truncated_content = content[:200] + "..." if len(content) > 200 else content
+        _set_last_llm_error(f"Agent round {round_index} returned invalid JSON. Raw response: {truncated_content}")
         return None
 
     rows = parsed.get("agents")
