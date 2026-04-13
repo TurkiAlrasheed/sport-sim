@@ -207,6 +207,186 @@
       "headline": "Peru holds presidential election amid a decade of political tumult - Al Jazeera",
       "category": "policy",
       "timestamp": "2026-04-11"
+    },
+    {
+      "id": "fed-governor-waller-signals-support-for-july-rate-cut-amid-cooli",
+      "headline": "Fed Governor Waller signals support for July rate cut amid cooling labor market",
+      "category": "macro",
+      "timestamp": "2026-04-12"
+    },
+    {
+      "id": "us-april-cpi-comes-in-hot-at-3-4-above-consensus-of-3-1",
+      "headline": "US April CPI comes in hot at 3.4%, above consensus of 3.1%",
+      "category": "macro",
+      "timestamp": "2026-04-10"
+    },
+    {
+      "id": "initial-jobless-claims-surge-to-280k-highest-level-since-october",
+      "headline": "Initial jobless claims surge to 280K, highest level since October 2023",
+      "category": "macro",
+      "timestamp": "2026-04-10"
+    },
+    {
+      "id": "goldman-sachs-raises-s-p-500-year-end-target-to-6-500-citing-res",
+      "headline": "Goldman Sachs raises S&P 500 year-end target to 6,500 citing resilient earnings",
+      "category": "markets",
+      "timestamp": "2026-04-11"
+    },
+    {
+      "id": "opec-agrees-to-extend-production-cuts-through-q3-2026",
+      "headline": "OPEC+ agrees to extend production cuts through Q3 2026",
+      "category": "markets",
+      "timestamp": "2026-04-09"
+    },
+    {
+      "id": "bitcoin-etf-sees-record-2-1b-single-day-inflow-as-institutional-",
+      "headline": "Bitcoin ETF sees record $2.1B single-day inflow as institutional adoption accelerates",
+      "category": "crypto",
+      "timestamp": "2026-04-11"
+    },
+    {
+      "id": "sec-chair-signals-openness-to-spot-ethereum-etf-in-congressional",
+      "headline": "SEC Chair signals openness to spot Ethereum ETF in Congressional testimony",
+      "category": "crypto",
+      "timestamp": "2026-04-08"
+    },
+    {
+      "id": "tesla-cybertruck-deliveries-beat-q1-estimates-by-40-stock-rallie",
+      "headline": "Tesla Cybertruck deliveries beat Q1 estimates by 40%, stock rallies 8%",
+      "category": "company",
+      "timestamp": "2026-04-07"
+    },
+    {
+      "id": "nvidia-unveils-blackwell-ultra-gpu-secures-15b-in-advance-orders",
+      "headline": "Nvidia unveils Blackwell Ultra GPU, secures $15B in advance orders from hyperscalers",
+      "category": "company",
+      "timestamp": "2026-04-09"
+    },
+    {
+      "id": "white-house-announces-25-tariff-on-chinese-evs-and-semiconductor",
+      "headline": "White House announces 25% tariff on Chinese EVs and semiconductors effective June 1",
+      "category": "policy",
+      "timestamp": "2026-04-08"
+    },
+    {
+      "id": "senate-banking-committee-advances-bipartisan-stablecoin-regulati",
+      "headline": "Senate Banking Committee advances bipartisan stablecoin regulation bill 14-9",
+      "category": "policy",
+      "timestamp": "2026-04-10"
+    },
+    {
+      "id": "new-fox-news-poll-shows-democrats-leading-in-5-of-8-contested-se",
+      "headline": "New Fox News poll shows Democrats leading in 5 of 8 contested Senate seats",
+      "category": "policy",
+      "timestamp": "2026-04-11"
+    },
+    {
+      "id": "drake-teases-new-album-tracklist-on-instagram-features-surprise-",
+      "headline": "Drake teases new album tracklist on Instagram, features surprise Kendrick Lamar collab",
+      "category": "culture",
+      "timestamp": "2026-04-12"
+    },
+    {
+      "id": "netflix-surpasses-285m-global-subscribers-in-q1-2026-beating-gui",
+      "headline": "Netflix surpasses 285M global subscribers in Q1 2026, beating guidance by 4M",
+      "category": "culture",
+      "timestamp": "2026-04-06"
+    },
+    {
+      "id": "iran-threatens-to-close-strait-of-hormuz-after-us-airstrikes-in-",
+      "headline": "Iran threatens to close Strait of Hormuz after US airstrikes in Yemen escalate",
+      "category": "macro",
+      "timestamp": "2026-04-11"
+    },
+    {
+      "id": "us-q1-2026-gdp-grows-just-1-2-well-below-consensus-of-2-0",
+      "headline": "US Q1 2026 GDP grows just 1.2%, well below consensus of 2.0%",
+      "category": "macro",
+      "timestamp": "2026-04-07"
+    },
+    {
+      "id": "apple-announces-partnership-with-tesla-for-in-car-ai-assistant-p",
+      "headline": "Apple announces partnership with Tesla for in-car AI assistant powered by Apple Intelligence",
+      "category": "company",
+      "timestamp": "2026-04-09"
+    },
+    {
+      "id": "china-retaliates-with-tariffs-on-50b-of-us-agricultural-and-ener",
+      "headline": "China retaliates with tariffs on $50B of US agricultural and energy exports",
+      "category": "policy",
+      "timestamp": "2026-04-10"
+    },
+    {
+      "id": "bitcoin-surges-past-95k-resistance-as-halving-anniversary-rally-",
+      "headline": "Bitcoin surges past $95K resistance as halving anniversary rally accelerates",
+      "category": "crypto",
+      "timestamp": "2026-04-12"
+    },
+    {
+      "id": "federal-reserve-minutes-reveal-deep-committee-split-on-timing-of",
+      "headline": "Federal Reserve minutes reveal deep committee split on timing of rate cuts",
+      "category": "macro",
+      "timestamp": "2026-04-09"
+    },
+    {
+      "id": "us-consumer-confidence-drops-to-18-month-low-amid-tariff-and-inf",
+      "headline": "US consumer confidence drops to 18-month low amid tariff and inflation worries",
+      "category": "macro",
+      "timestamp": "2026-04-08"
+    },
+    {
+      "id": "microsoft-and-nvidia-expand-ai-data-center-partnership-with-10b-",
+      "headline": "Microsoft and Nvidia expand AI data center partnership with $10B joint investment",
+      "category": "company",
+      "timestamp": "2026-04-11"
+    },
+    {
+      "id": "republican-senators-block-crypto-regulation-bill-citing-federal-",
+      "headline": "Republican senators block crypto regulation bill, citing federal overreach concerns",
+      "category": "policy",
+      "timestamp": "2026-04-12"
+    },
+    {
+      "id": "disney-and-hulu-combined-platform-reaches-260m-subscribers-world",
+      "headline": "Disney+ and Hulu combined platform reaches 260M subscribers worldwide",
+      "category": "culture",
+      "timestamp": "2026-04-07"
+    },
+    {
+      "id": "ecb-cuts-benchmark-rate-to-2-5-widening-divergence-with-hawkish-",
+      "headline": "ECB cuts benchmark rate to 2.5%, widening divergence with hawkish Fed stance",
+      "category": "macro",
+      "timestamp": "2026-04-10"
+    },
+    {
+      "id": "tesla-recalls-150k-model-y-vehicles-over-autonomous-steering-sof",
+      "headline": "Tesla recalls 150K Model Y vehicles over autonomous steering software defect",
+      "category": "company",
+      "timestamp": "2026-04-06"
+    },
+    {
+      "id": "saudi-arabia-signals-willingness-to-boost-oil-output-if-prices-s",
+      "headline": "Saudi Arabia signals willingness to boost oil output if prices stay above $85",
+      "category": "markets",
+      "timestamp": "2026-04-08"
+    },
+    {
+      "id": "ethereum-staking-yields-surge-to-8-as-defi-activity-hits-all-tim",
+      "headline": "Ethereum staking yields surge to 8% as DeFi activity hits all-time high",
+      "category": "crypto",
+      "timestamp": "2026-04-11"
+    },
+    {
+      "id": "congressional-midterm-primary-results-show-strong-anti-incumbent",
+      "headline": "Congressional midterm primary results show strong anti-incumbent wave across both parties",
+      "category": "policy",
+      "timestamp": "2026-04-09"
+    },
+    {
+      "id": "retail-sales-post-unexpected-0-6-monthly-decline-in-march-worst-",
+      "headline": "Retail sales post unexpected 0.6% monthly decline in March, worst since September 2024",
+      "category": "macro",
+      "timestamp": "2026-04-07"
     }
   ],
   "edges": [
@@ -216,7 +396,7 @@
       "target_id": "sp500-above-6000",
       "direction": 1,
       "strength": 0.7,
-      "reason": "A Fed rate cut typically lowers borrowing costs, which can boost corporate profits and lead to higher equity valuations, including the S&P 500."
+      "reason": "A Fed rate cut typically boosts equity markets by lowering borrowing costs, which can lead to higher stock prices."
     },
     {
       "source_id": "fed-rate-cut",
@@ -224,7 +404,7 @@
       "target_id": "us-recession-2026",
       "direction": -1,
       "strength": 0.6,
-      "reason": "A Fed rate cut is often a response to economic weakness, which could indicate a higher likelihood of a recession."
+      "reason": "A Fed rate cut is often a response to economic weakness, which may reduce the likelihood of a recession."
     },
     {
       "source_id": "us-cpi-above-3-5",
@@ -232,23 +412,23 @@
       "target_id": "fed-rate-cut",
       "direction": 1,
       "strength": 0.7,
-      "reason": "Higher inflation expectations typically lead the Fed to cut rates to stimulate the economy."
+      "reason": "Higher inflation rates typically lead the Fed to raise rates, so if CPI is above 3.5%, it may increase the likelihood of a rate cut if the economy shows signs of weakness."
     },
     {
       "source_id": "us-cpi-above-3-5",
       "source_type": "market",
       "target_id": "us-recession-2026",
-      "direction": -1,
+      "direction": 1,
       "strength": 0.6,
-      "reason": "Higher inflation rates can contribute to economic instability, making a recession less likely."
+      "reason": "Persistently high inflation could contribute to economic instability, increasing the chances of a recession by the end of 2026."
     },
     {
       "source_id": "us-cpi-above-3-5",
       "source_type": "market",
       "target_id": "sp500-above-6000",
-      "direction": 1,
+      "direction": -1,
       "strength": 0.5,
-      "reason": "Higher inflation can lead to increased corporate earnings, boosting equity valuations."
+      "reason": "Higher inflation rates can lead to increased interest rates, which may negatively impact equity valuations, including the S&P 500."
     },
     {
       "source_id": "us-recession-2026",
@@ -256,7 +436,7 @@
       "target_id": "fed-rate-cut",
       "direction": 1,
       "strength": 0.7,
-      "reason": "A recession typically leads the Federal Reserve to cut interest rates to stimulate the economy."
+      "reason": "A recession is likely to prompt the Fed to cut rates to stimulate the economy."
     },
     {
       "source_id": "us-recession-2026",
@@ -264,7 +444,7 @@
       "target_id": "sp500-above-6000",
       "direction": -1,
       "strength": 0.6,
-      "reason": "A recession is likely to negatively impact equity valuations, leading to a decrease in the S&P 500 index."
+      "reason": "A recession would generally lead to lower equity valuations, decreasing the likelihood of the S&P 500 exceeding 6,000."
     },
     {
       "source_id": "sp500-above-6000",
@@ -272,7 +452,7 @@
       "target_id": "fed-rate-cut",
       "direction": 1,
       "strength": 0.7,
-      "reason": "A strong performance of the S&P 500 above 6,000 is likely to prompt the Fed to cut rates to sustain economic growth."
+      "reason": "A strong performance of the S&P 500 above 6,000 may prompt the Fed to cut rates to sustain economic growth."
     },
     {
       "source_id": "sp500-above-6000",
@@ -288,7 +468,7 @@
       "target_id": "nvidia-above-4t",
       "direction": 1,
       "strength": 0.5,
-      "reason": "A bullish S&P 500 may lead to increased investment in tech stocks, boosting Nvidia's market cap."
+      "reason": "An increase in the S&P 500 can boost investor sentiment, potentially driving Nvidia's market cap higher."
     },
     {
       "source_id": "oil-above-90",
@@ -296,7 +476,7 @@
       "target_id": "sp500-above-6000",
       "direction": 1,
       "strength": 0.6,
-      "reason": "Higher oil prices can lead to increased revenues for energy companies, boosting overall equity valuations in the S&P 500."
+      "reason": "Higher oil prices can lead to increased revenues for energy companies, boosting overall market sentiment and equity valuations."
     },
     {
       "source_id": "oil-above-90",
@@ -304,7 +484,7 @@
       "target_id": "btc-above-100k",
       "direction": 1,
       "strength": 0.5,
-      "reason": "Rising oil prices may lead to increased inflation expectations, driving investors towards Bitcoin as a hedge, potentially increasing its price."
+      "reason": "Rising oil prices may drive inflation concerns, leading investors to seek alternative assets like Bitcoin as a hedge."
     },
     {
       "source_id": "btc-above-100k",
@@ -312,7 +492,7 @@
       "target_id": "eth-etf-approved",
       "direction": 1,
       "strength": 0.7,
-      "reason": "A significant rise in Bitcoin's price often leads to increased interest and investment in other cryptocurrencies, including Ethereum, potentially boosting the chances of an Ethereum ETF approval."
+      "reason": "A significant increase in Bitcoin price often boosts investor sentiment and interest in other cryptocurrencies, including Ethereum, leading to a higher likelihood of an Ethereum ETF approval."
     },
     {
       "source_id": "btc-above-100k",
@@ -320,7 +500,7 @@
       "target_id": "sp500-above-6000",
       "direction": 1,
       "strength": 0.5,
-      "reason": "A surge in Bitcoin's price can positively influence investor sentiment towards risk assets, including equities like the S&P 500."
+      "reason": "A surge in Bitcoin prices can positively influence overall market sentiment, potentially driving up stock prices, including those in the S&P 500."
     },
     {
       "source_id": "eth-etf-approved",
@@ -328,7 +508,7 @@
       "target_id": "btc-above-100k",
       "direction": 1,
       "strength": 0.7,
-      "reason": "Approval of a spot Ethereum ETF is likely to boost overall investor confidence in cryptocurrencies, leading to increased demand and higher prices for Bitcoin."
+      "reason": "Approval of a spot Ethereum ETF would likely boost overall confidence and investment in the crypto market, potentially increasing Bitcoin prices."
     },
     {
       "source_id": "eth-etf-approved",
@@ -336,7 +516,7 @@
       "target_id": "sp500-above-6000",
       "direction": 1,
       "strength": 0.5,
-      "reason": "The approval of a spot Ethereum ETF could signal a bullish trend in the crypto market, positively influencing investor sentiment in equities, particularly tech stocks associated with crypto."
+      "reason": "A positive sentiment in the crypto market from the approval of an Ethereum ETF could lead to increased risk appetite among investors, boosting equity markets like the S&P 500."
     },
     {
       "source_id": "tesla-q2-earnings",
@@ -344,7 +524,7 @@
       "target_id": "sp500-above-6000",
       "direction": 1,
       "strength": 0.7,
-      "reason": "Positive earnings from Tesla are likely to boost investor confidence, leading to higher equity valuations and a rise in the S&P 500."
+      "reason": "Positive earnings from Tesla can boost investor confidence, leading to higher equity valuations and an increase in the S&P 500 index."
     },
     {
       "source_id": "tesla-q2-earnings",
@@ -352,7 +532,7 @@
       "target_id": "nvidia-above-4t",
       "direction": 1,
       "strength": 0.6,
-      "reason": "Strong earnings from Tesla can positively influence the tech sector, benefiting Nvidia's market cap as investor sentiment improves."
+      "reason": "Strong earnings from Tesla may indicate a healthy tech sector, positively influencing Nvidia's market cap as investors become more optimistic."
     },
     {
       "source_id": "nvidia-above-4t",
@@ -360,7 +540,7 @@
       "target_id": "sp500-above-6000",
       "direction": 1,
       "strength": 0.7,
-      "reason": "A significant increase in Nvidia's market cap would likely boost investor confidence and valuations in the broader market, leading to a higher S&P 500 index."
+      "reason": "A higher Nvidia market cap is likely to boost investor confidence and drive up the S&P 500 index."
     },
     {
       "source_id": "nvidia-above-4t",
@@ -368,7 +548,7 @@
       "target_id": "tesla-q2-earnings",
       "direction": 1,
       "strength": 0.5,
-      "reason": "Nvidia's success may positively influence investor sentiment in the tech sector, benefiting other tech companies like Tesla."
+      "reason": "Nvidia's growth may positively influence the tech sector, benefiting Tesla's earnings outlook."
     },
     {
       "source_id": "china-tariffs",
@@ -376,7 +556,7 @@
       "target_id": "us-recession-2026",
       "direction": -1,
       "strength": 0.6,
-      "reason": "New tariffs on Chinese imports are likely to increase costs for US businesses, potentially leading to a slowdown in economic growth and increasing the risk of a recession."
+      "reason": "New tariffs on Chinese imports could lead to increased costs for US consumers and businesses, potentially slowing economic growth and increasing the likelihood of a recession."
     },
     {
       "source_id": "china-tariffs",
@@ -384,15 +564,7 @@
       "target_id": "sp500-above-6000",
       "direction": -1,
       "strength": 0.5,
-      "reason": "The imposition of new tariffs could negatively impact corporate earnings and investor sentiment, leading to a decrease in the S&P 500 index."
-    },
-    {
-      "source_id": "china-tariffs",
-      "source_type": "market",
-      "target_id": "oil-above-90",
-      "direction": 1,
-      "strength": 0.4,
-      "reason": "Increased tariffs may lead to higher production costs and inflation, which could drive up oil prices as companies pass on costs to consumers."
+      "reason": "Imposing new tariffs may negatively impact corporate profits and investor sentiment, leading to a decrease in the S&P 500 index."
     },
     {
       "source_id": "crypto-regulation",
@@ -400,7 +572,7 @@
       "target_id": "btc-above-100k",
       "direction": 1,
       "strength": 0.7,
-      "reason": "The passage of comprehensive crypto regulation is likely to increase investor confidence and drive up the price of Bitcoin."
+      "reason": "Passing a comprehensive crypto regulation bill would likely boost investor confidence in cryptocurrencies, leading to higher Bitcoin prices."
     },
     {
       "source_id": "crypto-regulation",
@@ -408,7 +580,7 @@
       "target_id": "eth-etf-approved",
       "direction": 1,
       "strength": 0.6,
-      "reason": "Federal crypto regulation could facilitate the approval of a spot Ethereum ETF, boosting demand and price for Ethereum."
+      "reason": "The approval of a comprehensive crypto regulation bill would create a more favorable environment for cryptocurrency investments, increasing the likelihood of a spot Ethereum ETF approval."
     },
     {
       "source_id": "midterms-flip-senate",
@@ -416,7 +588,7 @@
       "target_id": "china-tariffs",
       "direction": 1,
       "strength": 0.6,
-      "reason": "A Democratic Senate majority may lead to less aggressive trade policies, reducing the likelihood of new tariffs on China."
+      "reason": "A Democratic Senate majority may lead to a reduction in tariffs, positively influencing the likelihood of new tariffs being imposed."
     },
     {
       "source_id": "drake-album",
@@ -424,7 +596,7 @@
       "target_id": "streaming-300m",
       "direction": 1,
       "strength": 0.7,
-      "reason": "The release of a new Drake album is likely to increase interest and subscriptions in streaming platforms."
+      "reason": "A new album release by Drake could boost interest and subscriptions in streaming platforms."
     },
     {
       "source_id": "streaming-300m",
@@ -432,7 +604,7 @@
       "target_id": "sp500-above-6000",
       "direction": 1,
       "strength": 0.7,
-      "reason": "Increased subscriber growth for streaming platforms can boost investor sentiment and lead to higher equity valuations, particularly in tech stocks."
+      "reason": "Increased subscriber growth in streaming platforms can boost investor confidence and lead to higher equity valuations, particularly in tech stocks."
     },
     {
       "source_id": "streaming-300m",
@@ -440,39 +612,39 @@
       "target_id": "tesla-q2-earnings",
       "direction": 1,
       "strength": 0.6,
-      "reason": "A surge in streaming platform subscribers can indicate a strong consumer economy, positively impacting earnings expectations for companies like Tesla."
+      "reason": "A significant increase in streaming subscribers may indicate a stronger economy, which can positively impact consumer spending and lead to better earnings for companies like Tesla."
     },
     {
-      "source_id": "box-office-milestone-super-mario-galaxy-soars-past-300m-in-u-s-a",
+      "source_id": "appeals-court-rules-trump-s-white-house-ballroom-construction-ca",
       "source_type": "news",
-      "target_id": "sp500-above-6000",
+      "target_id": "china-tariffs",
       "direction": 1,
       "strength": 0.6,
-      "reason": "The success of 'Super Mario Galaxy' at the box office may boost investor confidence, positively impacting the S&P 500."
+      "reason": "The court ruling may signal a more favorable regulatory environment, potentially reducing tensions that could lead to new tariffs."
     },
     {
       "source_id": "box-office-milestone-super-mario-galaxy-soars-past-300m-in-u-s-a",
       "source_type": "news",
       "target_id": "streaming-300m",
       "direction": 1,
-      "strength": 0.7,
-      "reason": "The box office success of 'Super Mario Galaxy' indicates strong consumer engagement, increasing the likelihood of a streaming platform exceeding 300 million subscribers."
+      "strength": 0.6,
+      "reason": "The success of 'Super Mario Galaxy' at the box office may indicate a positive trend for streaming platforms, increasing the likelihood they will exceed 300 million subscribers."
     },
     {
-      "source_id": "box-office-milestone-super-mario-galaxy-soars-past-300m-in-u-s-a",
+      "source_id": "pope-leo-says-delusion-of-omnipotence-is-fueling-u-s-israeli-war",
       "source_type": "news",
-      "target_id": "tesla-q2-earnings",
+      "target_id": "oil-above-90",
       "direction": 1,
-      "strength": 0.5,
-      "reason": "Increased consumer spending from successful entertainment franchises like 'Super Mario Galaxy' may positively influence Tesla's sales and earnings."
+      "strength": 0.7,
+      "reason": "Increased geopolitical tensions in the region may drive oil prices higher, raising the probability of oil exceeding $90 per barrel."
     },
     {
       "source_id": "u-s-naval-destroyers-have-crossed-the-strait-of-hormuz-centcom-s",
       "source_type": "news",
       "target_id": "oil-above-90",
       "direction": 1,
-      "strength": 0.8,
-      "reason": "Increased military presence in the Strait of Hormuz raises concerns about oil supply disruptions, likely driving oil prices higher."
+      "strength": 0.7,
+      "reason": "Increased military presence in the Strait of Hormuz raises concerns about oil supply disruptions, likely pushing oil prices higher."
     },
     {
       "source_id": "us-clearing-out-strait-of-hormuz-trump-claims-as-iran-threatens-",
@@ -480,7 +652,375 @@
       "target_id": "oil-above-90",
       "direction": 1,
       "strength": 0.8,
-      "reason": "Increased military tensions in the Strait of Hormuz typically lead to higher oil prices due to supply concerns."
+      "reason": "Increased tensions in the Strait of Hormuz typically lead to higher oil prices due to supply concerns."
+    },
+    {
+      "source_id": "fed-governor-waller-signals-support-for-july-rate-cut-amid-cooli",
+      "source_type": "news",
+      "target_id": "fed-rate-cut",
+      "direction": 1,
+      "strength": 0.8,
+      "reason": "Waller's support for a rate cut amid a cooling labor market significantly increases the likelihood of a 25 bps cut at the July FOMC meeting."
+    },
+    {
+      "source_id": "fed-governor-waller-signals-support-for-july-rate-cut-amid-cooli",
+      "source_type": "news",
+      "target_id": "us-recession-2026",
+      "direction": -1,
+      "strength": 0.6,
+      "reason": "Indications of a rate cut suggest a proactive monetary policy response, which may reduce the probability of a recession by the end of 2026."
+    },
+    {
+      "source_id": "us-april-cpi-comes-in-hot-at-3-4-above-consensus-of-3-1",
+      "source_type": "news",
+      "target_id": "fed-rate-cut",
+      "direction": -1,
+      "strength": 0.8,
+      "reason": "Higher-than-expected CPI indicates inflation pressures, making a rate cut less likely."
+    },
+    {
+      "source_id": "us-april-cpi-comes-in-hot-at-3-4-above-consensus-of-3-1",
+      "source_type": "news",
+      "target_id": "us-cpi-above-3-5",
+      "direction": 1,
+      "strength": 0.9,
+      "reason": "The reported CPI of 3.4% is above the consensus, increasing the likelihood of CPI being above 3.5% for June."
+    },
+    {
+      "source_id": "us-april-cpi-comes-in-hot-at-3-4-above-consensus-of-3-1",
+      "source_type": "news",
+      "target_id": "us-recession-2026",
+      "direction": -1,
+      "strength": 0.6,
+      "reason": "A higher CPI suggests stronger inflation, which may reduce the likelihood of a recession occurring by the end of 2026."
+    },
+    {
+      "source_id": "initial-jobless-claims-surge-to-280k-highest-level-since-october",
+      "source_type": "news",
+      "target_id": "fed-rate-cut",
+      "direction": 1,
+      "strength": 0.8,
+      "reason": "A surge in jobless claims indicates a weakening labor market, increasing the likelihood of the Fed cutting rates."
+    },
+    {
+      "source_id": "initial-jobless-claims-surge-to-280k-highest-level-since-october",
+      "source_type": "news",
+      "target_id": "us-recession-2026",
+      "direction": 1,
+      "strength": 0.7,
+      "reason": "Rising jobless claims suggest economic distress, raising the probability of a recession by the end of 2026."
+    },
+    {
+      "source_id": "goldman-sachs-raises-s-p-500-year-end-target-to-6-500-citing-res",
+      "source_type": "news",
+      "target_id": "sp500-above-6000",
+      "direction": 1,
+      "strength": 0.8,
+      "reason": "Goldman Sachs raising the S&P 500 year-end target to 6,500 indicates strong market confidence, increasing the likelihood of the index exceeding 6,000."
+    },
+    {
+      "source_id": "opec-agrees-to-extend-production-cuts-through-q3-2026",
+      "source_type": "news",
+      "target_id": "oil-above-90",
+      "direction": 1,
+      "strength": 0.8,
+      "reason": "Extending production cuts is likely to reduce supply, increasing the probability of oil prices rising above $90 per barrel."
+    },
+    {
+      "source_id": "bitcoin-etf-sees-record-2-1b-single-day-inflow-as-institutional-",
+      "source_type": "news",
+      "target_id": "btc-above-100k",
+      "direction": 1,
+      "strength": 0.8,
+      "reason": "Record inflow into Bitcoin ETF indicates strong institutional demand, increasing the likelihood of Bitcoin exceeding $100K."
+    },
+    {
+      "source_id": "sec-chair-signals-openness-to-spot-ethereum-etf-in-congressional",
+      "source_type": "news",
+      "target_id": "eth-etf-approved",
+      "direction": 1,
+      "strength": 0.8,
+      "reason": "The SEC Chair's openness to a spot Ethereum ETF significantly increases the likelihood of its approval."
+    },
+    {
+      "source_id": "tesla-cybertruck-deliveries-beat-q1-estimates-by-40-stock-rallie",
+      "source_type": "news",
+      "target_id": "tesla-q2-earnings",
+      "direction": 1,
+      "strength": 0.8,
+      "reason": "Strong delivery numbers suggest Tesla will report positive earnings for Q2 2026."
+    },
+    {
+      "source_id": "tesla-cybertruck-deliveries-beat-q1-estimates-by-40-stock-rallie",
+      "source_type": "news",
+      "target_id": "sp500-above-6000",
+      "direction": 1,
+      "strength": 0.6,
+      "reason": "Tesla's stock rally contributes positively to overall market sentiment, increasing the likelihood of the S&P 500 exceeding 6,000."
+    },
+    {
+      "source_id": "nvidia-unveils-blackwell-ultra-gpu-secures-15b-in-advance-orders",
+      "source_type": "news",
+      "target_id": "nvidia-above-4t",
+      "direction": 1,
+      "strength": 0.8,
+      "reason": "The unveiling of a new GPU and securing $15B in advance orders significantly boosts Nvidia's market cap prospects."
+    },
+    {
+      "source_id": "white-house-announces-25-tariff-on-chinese-evs-and-semiconductor",
+      "source_type": "news",
+      "target_id": "china-tariffs",
+      "direction": 1,
+      "strength": 0.9,
+      "reason": "The announcement of a 25% tariff on Chinese EVs and semiconductors directly confirms the imposition of new tariffs on Chinese imports."
+    },
+    {
+      "source_id": "senate-banking-committee-advances-bipartisan-stablecoin-regulati",
+      "source_type": "news",
+      "target_id": "crypto-regulation",
+      "direction": 1,
+      "strength": 0.8,
+      "reason": "Advancing a bipartisan stablecoin regulation bill increases the likelihood of comprehensive crypto regulation being passed."
+    },
+    {
+      "source_id": "new-fox-news-poll-shows-democrats-leading-in-5-of-8-contested-se",
+      "source_type": "news",
+      "target_id": "midterms-flip-senate",
+      "direction": 1,
+      "strength": 0.7,
+      "reason": "Democrats leading in contested Senate seats increases the likelihood of flipping the Senate in the 2026 midterms."
+    },
+    {
+      "source_id": "drake-teases-new-album-tracklist-on-instagram-features-surprise-",
+      "source_type": "news",
+      "target_id": "drake-album",
+      "direction": 1,
+      "strength": 0.8,
+      "reason": "The announcement of a Kendrick Lamar collaboration increases anticipation for Drake's album, making its release more likely."
+    },
+    {
+      "source_id": "netflix-surpasses-285m-global-subscribers-in-q1-2026-beating-gui",
+      "source_type": "news",
+      "target_id": "streaming-300m",
+      "direction": 1,
+      "strength": 0.8,
+      "reason": "Netflix surpassing 285M subscribers increases the likelihood that a streaming platform will exceed 300M subscribers in 2026."
+    },
+    {
+      "source_id": "iran-threatens-to-close-strait-of-hormuz-after-us-airstrikes-in-",
+      "source_type": "news",
+      "target_id": "oil-above-90",
+      "direction": 1,
+      "strength": 0.8,
+      "reason": "Threats to close the Strait of Hormuz could disrupt oil supply, increasing the likelihood of oil prices rising above $90."
+    },
+    {
+      "source_id": "iran-threatens-to-close-strait-of-hormuz-after-us-airstrikes-in-",
+      "source_type": "news",
+      "target_id": "us-recession-2026",
+      "direction": -1,
+      "strength": 0.6,
+      "reason": "Increased geopolitical tensions may lead to economic instability, potentially reducing the likelihood of a recession."
+    },
+    {
+      "source_id": "us-q1-2026-gdp-grows-just-1-2-well-below-consensus-of-2-0",
+      "source_type": "news",
+      "target_id": "fed-rate-cut",
+      "direction": 1,
+      "strength": 0.8,
+      "reason": "Lower-than-expected GDP growth increases the likelihood of the Fed cutting rates to stimulate the economy."
+    },
+    {
+      "source_id": "us-q1-2026-gdp-grows-just-1-2-well-below-consensus-of-2-0",
+      "source_type": "news",
+      "target_id": "us-recession-2026",
+      "direction": 1,
+      "strength": 0.7,
+      "reason": "Weak GDP growth raises concerns about a potential recession occurring by the end of 2026."
+    },
+    {
+      "source_id": "apple-announces-partnership-with-tesla-for-in-car-ai-assistant-p",
+      "source_type": "news",
+      "target_id": "tesla-q2-earnings",
+      "direction": 1,
+      "strength": 0.7,
+      "reason": "The partnership with Apple is likely to enhance Tesla's product offerings, potentially leading to positive earnings."
+    },
+    {
+      "source_id": "china-retaliates-with-tariffs-on-50b-of-us-agricultural-and-ener",
+      "source_type": "news",
+      "target_id": "china-tariffs",
+      "direction": 1,
+      "strength": 0.8,
+      "reason": "China's retaliatory tariffs increase the likelihood of new tariffs being imposed by the US."
+    },
+    {
+      "source_id": "china-retaliates-with-tariffs-on-50b-of-us-agricultural-and-ener",
+      "source_type": "news",
+      "target_id": "us-recession-2026",
+      "direction": 1,
+      "strength": 0.6,
+      "reason": "Escalating trade tensions from tariffs may contribute to economic slowdown, raising the probability of a recession."
+    },
+    {
+      "source_id": "china-retaliates-with-tariffs-on-50b-of-us-agricultural-and-ener",
+      "source_type": "news",
+      "target_id": "us-cpi-above-3-5",
+      "direction": 1,
+      "strength": 0.5,
+      "reason": "Increased tariffs can lead to higher consumer prices, raising the likelihood of CPI exceeding 3.5%."
+    },
+    {
+      "source_id": "bitcoin-surges-past-95k-resistance-as-halving-anniversary-rally-",
+      "source_type": "news",
+      "target_id": "btc-above-100k",
+      "direction": 1,
+      "strength": 0.8,
+      "reason": "The surge in Bitcoin past $95K increases the likelihood of it exceeding $100K by July 1, 2026."
+    },
+    {
+      "source_id": "federal-reserve-minutes-reveal-deep-committee-split-on-timing-of",
+      "source_type": "news",
+      "target_id": "fed-rate-cut",
+      "direction": 1,
+      "strength": 0.8,
+      "reason": "The deep split in the Federal Reserve committee on rate cuts suggests a higher likelihood of a rate cut at the July FOMC meeting."
+    },
+    {
+      "source_id": "us-consumer-confidence-drops-to-18-month-low-amid-tariff-and-inf",
+      "source_type": "news",
+      "target_id": "fed-rate-cut",
+      "direction": 1,
+      "strength": 0.7,
+      "reason": "A drop in consumer confidence suggests a weakening economy, increasing the likelihood of the Fed cutting rates."
+    },
+    {
+      "source_id": "us-consumer-confidence-drops-to-18-month-low-amid-tariff-and-inf",
+      "source_type": "news",
+      "target_id": "us-recession-2026",
+      "direction": 1,
+      "strength": 0.6,
+      "reason": "Declining consumer confidence raises concerns about economic stability, making a recession by the end of 2026 more likely."
+    },
+    {
+      "source_id": "us-consumer-confidence-drops-to-18-month-low-amid-tariff-and-inf",
+      "source_type": "news",
+      "target_id": "china-tariffs",
+      "direction": 1,
+      "strength": 0.5,
+      "reason": "The news highlights ongoing tariff worries, increasing the probability of new tariffs being imposed by July 2026."
+    },
+    {
+      "source_id": "microsoft-and-nvidia-expand-ai-data-center-partnership-with-10b-",
+      "source_type": "news",
+      "target_id": "nvidia-above-4t",
+      "direction": 1,
+      "strength": 0.8,
+      "reason": "The $10B joint investment with Microsoft significantly boosts Nvidia's growth prospects, increasing the likelihood of its market cap exceeding $4 trillion."
+    },
+    {
+      "source_id": "microsoft-and-nvidia-expand-ai-data-center-partnership-with-10b-",
+      "source_type": "news",
+      "target_id": "tesla-q2-earnings",
+      "direction": 1,
+      "strength": 0.3,
+      "reason": "The expansion of AI capabilities through the partnership may indirectly benefit Tesla's performance in the tech-driven market."
+    },
+    {
+      "source_id": "microsoft-and-nvidia-expand-ai-data-center-partnership-with-10b-",
+      "source_type": "news",
+      "target_id": "sp500-above-6000",
+      "direction": 1,
+      "strength": 0.4,
+      "reason": "The investment in AI by major companies like Microsoft and Nvidia could drive overall market optimism, increasing the chances of the S&P 500 surpassing 6,000."
+    },
+    {
+      "source_id": "republican-senators-block-crypto-regulation-bill-citing-federal-",
+      "source_type": "news",
+      "target_id": "crypto-regulation",
+      "direction": -1,
+      "strength": 0.8,
+      "reason": "Blocking the crypto regulation bill decreases the likelihood of federal regulation passing."
+    },
+    {
+      "source_id": "disney-and-hulu-combined-platform-reaches-260m-subscribers-world",
+      "source_type": "news",
+      "target_id": "streaming-300m",
+      "direction": -1,
+      "strength": 0.6,
+      "reason": "The news of Disney+ and Hulu reaching 260M subscribers suggests that the target of exceeding 300M subscribers in 2026 is less likely to be met."
+    },
+    {
+      "source_id": "ecb-cuts-benchmark-rate-to-2-5-widening-divergence-with-hawkish-",
+      "source_type": "news",
+      "target_id": "fed-rate-cut",
+      "direction": 1,
+      "strength": 0.7,
+      "reason": "The ECB's rate cut may increase pressure on the Fed to consider a rate cut, raising the probability of a Fed rate cut."
+    },
+    {
+      "source_id": "ecb-cuts-benchmark-rate-to-2-5-widening-divergence-with-hawkish-",
+      "source_type": "news",
+      "target_id": "us-recession-2026",
+      "direction": 1,
+      "strength": 0.6,
+      "reason": "The ECB's rate cut could signal economic weakness in Europe, which may have spillover effects on the US economy, increasing the likelihood of a recession."
+    },
+    {
+      "source_id": "tesla-recalls-150k-model-y-vehicles-over-autonomous-steering-sof",
+      "source_type": "news",
+      "target_id": "tesla-q2-earnings",
+      "direction": -1,
+      "strength": 0.8,
+      "reason": "The recall of 150K Model Y vehicles over a software defect is likely to negatively impact Tesla's earnings for Q2 2026."
+    },
+    {
+      "source_id": "saudi-arabia-signals-willingness-to-boost-oil-output-if-prices-s",
+      "source_type": "news",
+      "target_id": "oil-above-90",
+      "direction": 1,
+      "strength": 0.7,
+      "reason": "Saudi Arabia's willingness to boost oil output if prices stay above $85 increases the likelihood of oil prices exceeding $90."
+    },
+    {
+      "source_id": "ethereum-staking-yields-surge-to-8-as-defi-activity-hits-all-tim",
+      "source_type": "news",
+      "target_id": "btc-above-100k",
+      "direction": 1,
+      "strength": 0.7,
+      "reason": "Surge in Ethereum staking yields and DeFi activity may indicate overall bullish sentiment in the crypto market, positively impacting Bitcoin prices."
+    },
+    {
+      "source_id": "ethereum-staking-yields-surge-to-8-as-defi-activity-hits-all-tim",
+      "source_type": "news",
+      "target_id": "eth-etf-approved",
+      "direction": 1,
+      "strength": 0.8,
+      "reason": "Increased staking yields and DeFi activity enhance the case for a Spot Ethereum ETF approval due to heightened investor interest."
+    },
+    {
+      "source_id": "congressional-midterm-primary-results-show-strong-anti-incumbent",
+      "source_type": "news",
+      "target_id": "midterms-flip-senate",
+      "direction": 1,
+      "strength": 0.8,
+      "reason": "Strong anti-incumbent wave increases the likelihood of flipping the Senate in the midterm elections."
+    },
+    {
+      "source_id": "retail-sales-post-unexpected-0-6-monthly-decline-in-march-worst-",
+      "source_type": "news",
+      "target_id": "fed-rate-cut",
+      "direction": 1,
+      "strength": 0.8,
+      "reason": "A decline in retail sales increases the likelihood of the Fed cutting rates to stimulate the economy."
+    },
+    {
+      "source_id": "retail-sales-post-unexpected-0-6-monthly-decline-in-march-worst-",
+      "source_type": "news",
+      "target_id": "us-recession-2026",
+      "direction": 1,
+      "strength": 0.7,
+      "reason": "The unexpected decline in retail sales raises concerns about economic contraction, increasing the probability of a recession."
     }
   ]
 }
