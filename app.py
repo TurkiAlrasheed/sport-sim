@@ -63,7 +63,7 @@ if not state["markets"]:
 
 with st.sidebar:
     st.header("Simulation")
-    agent_count = st.slider("Number of agents", min_value=5, max_value=20, value=8)
+    agent_count = st.slider("Number of agents", min_value=5, max_value=100, value=8)
     randomness = st.slider("Agent randomness", min_value=0.0, max_value=0.35, value=0.12, step=0.01)
     seed = st.number_input("Random seed", min_value=0, max_value=9999, value=7, step=1)
     threshold_pct = st.slider("Trade threshold (%)", min_value=1, max_value=20, value=5)
