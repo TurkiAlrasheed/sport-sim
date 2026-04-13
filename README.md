@@ -35,6 +35,7 @@ streamlit run app.py
 ## Notes
 
 - Market probability is currently user-provided or mocked via presets
+- Live Kalshi markets can be imported from the Markets page for real-time market probability data
 - Event understanding is intentionally lightweight and heuristic-based
 - This is meant to be a hackathon starter, not a production pricing model
 - Real API keys should go in `.env`, which is ignored by git

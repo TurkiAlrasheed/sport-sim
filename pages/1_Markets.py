@@ -10,6 +10,7 @@ import pandas as pd
 import streamlit as st
 
 from edge_analysis import apply_market_edges
+from kalshi import fetch_top_markets, KALSHI_CATEGORIES
 from utils import (
     CATEGORIES,
     add_market,
@@ -25,6 +26,61 @@ st.title("Markets")
 st.caption("Add, view, and remove prediction markets.")
 
 state = get_state()
+
+st.subheader("Import live Kalshi markets")
+st.caption("Fetch open Kalshi prediction markets and add them directly to your state.")
+
+col_kcat, col_klimit = st.columns([2, 1])
+selected_category = col_kcat.selectbox("Kalshi category", KALSHI_CATEGORIES)
+limit = col_klimit.slider("Max markets", min_value=1, max_value=20, value=10)
+fetch_clicked = st.button("Fetch Kalshi markets", type="primary", use_container_width=True)
+
+if fetch_clicked:
+    with st.spinner("Loading Kalshi markets..."):
+        try:
+            markets = fetch_top_markets(selected_category, limit=limit)
+        except Exception as exc:
+            st.error(f"Failed to fetch Kalshi markets: {exc}")
+            markets = []
+
+    if not markets:
+        st.warning("No markets were returned from Kalshi. Try again later.")
+    else:
+        existing_ids = {m["id"] for m in state["markets"]}
+        added = 0
+        imported_markets: list[dict] = []
+        for km in markets:
+            market_id = slugify(km["ticker"] or km["title"])
+            if market_id in existing_ids:
+                continue
+            market_obj = {
+                "id": market_id,
+                "name": km["title"],
+                "description": km["event"],
+                "category": selected_category,
+                "market_probability": km["market_probability"],
+            }
+            add_market(state, market_obj)
+            imported_markets.append(market_obj)
+            existing_ids.add(market_id)
+            added += 1
+
+        if added:
+            persist()
+            st.success(f"Added **{added}** Kalshi market(s) from {selected_category}.")
+
+            if os.environ.get("OPENAI_API_KEY") and len(state["markets"]) >= 2:
+                with st.spinner("Generating AI market relationships for imported markets..."):
+                    for market in imported_markets:
+                        try:
+                            apply_market_edges(state, market)
+                        except Exception:
+                            pass
+                persist()
+
+            st.rerun()
+        else:
+            st.info("All fetched Kalshi markets are already present in your market list.")
 
 # ── Add market form ──────────────────────────────────────────────────────
 
