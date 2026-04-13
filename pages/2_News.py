@@ -11,6 +11,7 @@ import pandas as pd
 import streamlit as st
 
 from edge_analysis import apply_news_edges
+from news_api import fetch_top_headlines
 from utils import (
     CATEGORIES,
     add_news,
@@ -26,6 +27,75 @@ st.title("News Events")
 st.caption("Add, view, and remove real-world news that affects markets.")
 
 state = get_state()
+
+# ── Fetch live headlines ─────────────────────────────────────────────────
+
+st.subheader("Fetch Live Headlines")
+
+has_newsapi_key = bool(os.environ.get("NEWSAPI_KEY"))
+if not has_newsapi_key:
+    st.warning("Set `NEWSAPI_KEY` in your `.env` file to enable live headline fetching.")
+
+col_fetch, col_info = st.columns([1, 2])
+fetch_clicked = col_fetch.button(
+    "Fetch latest headlines",
+    type="primary",
+    use_container_width=True,
+    disabled=not has_newsapi_key,
+)
+
+if fetch_clicked:
+    with st.spinner("Fetching top headlines from NewsAPI..."):
+        try:
+            headlines = fetch_top_headlines(page_size=20)
+        except Exception as exc:
+            st.error(f"Failed to fetch headlines: {exc}")
+            headlines = []
+
+    if not headlines:
+        st.warning("NewsAPI returned no usable headlines. Try again later.")
+    else:
+        existing_ids = {n["id"] for n in state["news"]}
+        new_headlines = [h for h in headlines if h["id"] not in existing_ids]
+
+        if not new_headlines:
+            st.info(
+                f"Fetched {len(headlines)} headline(s), but all are already "
+                "in your news list."
+            )
+        else:
+            total_edges = 0
+            for h in new_headlines:
+                add_news(state, {
+                    "id": h["id"],
+                    "headline": h["headline"],
+                    "category": h["category"],
+                    "timestamp": h["timestamp"],
+                })
+
+            persist()
+            st.success(f"Added **{len(new_headlines)}** new headline(s).")
+
+            if os.environ.get("OPENAI_API_KEY") and state["markets"]:
+                with st.spinner("Generating AI dependency edges for new headlines..."):
+                    for h in new_headlines:
+                        news_obj = next(
+                            n for n in state["news"] if n["id"] == h["id"]
+                        )
+                        try:
+                            added = apply_news_edges(state, news_obj)
+                            total_edges += added
+                        except Exception:
+                            pass
+                if total_edges:
+                    st.success(
+                        f"AI generated **{total_edges}** dependency "
+                        f"edge{'s' if total_edges != 1 else ''}."
+                    )
+
+            st.rerun()
+
+st.divider()
 
 # ── Add news form ────────────────────────────────────────────────────────
 

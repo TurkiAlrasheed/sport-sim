@@ -64,6 +64,45 @@ if agraph is None:
     else:
         st.info("Add some markets and news first to see dependencies.")
 else:
+    # ── Selection state ───────────────────────────────────────────────
+    if "selected_graph_node" not in st.session_state:
+        st.session_state.selected_graph_node = None
+
+    sel_id: str | None = st.session_state.selected_graph_node
+
+    # Precompute 1-hop neighbor set for the selected node
+    highlight_ids: set[str] = set()
+    highlight_edge_keys: set[tuple[str, str]] = set()
+    if sel_id:
+        highlight_ids.add(sel_id)
+        for e in state["edges"]:
+            if e["source_id"] == sel_id:
+                highlight_ids.add(e["target_id"])
+                highlight_edge_keys.add((e["source_id"], e["target_id"]))
+            elif e["target_id"] == sel_id:
+                highlight_ids.add(e["source_id"])
+                highlight_edge_keys.add((e["source_id"], e["target_id"]))
+
+    DIM_NODE_COLOR = "rgba(180,180,180,0.12)"
+    DIM_FONT_COLOR = "rgba(160,160,160,0.25)"
+    DIM_EDGE_COLOR = "rgba(180,180,180,0.08)"
+
+    def _node_color(node_id: str, category: str) -> str | dict:
+        base = CATEGORY_COLORS.get(category, "#94a3b8")
+        if not sel_id or node_id in highlight_ids:
+            if node_id == sel_id:
+                return {"background": base, "border": "#facc15"}
+            return base
+        return {"background": DIM_NODE_COLOR, "border": DIM_NODE_COLOR}
+
+    def _node_font(node_id: str) -> dict:
+        if not sel_id or node_id in highlight_ids:
+            return {"color": "#e2e8f0"}
+        return {"color": DIM_FONT_COLOR}
+
+    def _border_width(node_id: str) -> int:
+        return 3 if node_id == sel_id else 1
+
     nodes: list[Node] = []
     edges_vis: list[Edge] = []
 
@@ -72,9 +111,11 @@ else:
             id=m["id"],
             label=m["name"][:30],
             title=m["description"],
-            color=CATEGORY_COLORS.get(m["category"], "#94a3b8"),
+            color=_node_color(m["id"], m["category"]),
             size=25,
             shape="dot",
+            font=_node_font(m["id"]),
+            borderWidth=_border_width(m["id"]),
         ))
 
     for n in state["news"]:
@@ -82,20 +123,33 @@ else:
             id=n["id"],
             label=n["headline"][:30],
             title=n["headline"],
-            color=CATEGORY_COLORS.get(n["category"], "#94a3b8"),
+            color=_node_color(n["id"], n["category"]),
             size=18,
             shape="square",
+            font=_node_font(n["id"]),
+            borderWidth=_border_width(n["id"]),
         ))
 
     for e in state["edges"]:
-        edge_color = "#22c55e" if e["direction"] > 0 else "#ef4444"
+        active = not sel_id or (e["source_id"], e["target_id"]) in highlight_edge_keys
+        if active:
+            edge_color = "#22c55e" if e["direction"] > 0 else "#ef4444"
+            edge_width = 1 + e["strength"] * 3
+            edge_label = f"{'+' if e['direction'] > 0 else '-'}{e['strength']:.1f}"
+            edge_font = {"color": "#cbd5e1", "strokeWidth": 0, "size": 10}
+        else:
+            edge_color = DIM_EDGE_COLOR
+            edge_width = 0.5
+            edge_label = ""
+            edge_font = {"color": "rgba(0,0,0,0)"}
         edges_vis.append(Edge(
             source=e["source_id"],
             target=e["target_id"],
-            label=f"{'+' if e['direction'] > 0 else '-'}{e['strength']:.1f}",
+            label=edge_label,
             color=edge_color,
-            width=1 + e["strength"] * 3,
-            title=e.get("reason", ""),
+            width=edge_width,
+            title=e.get("reason", "") if active else "",
+            font=edge_font,
         ))
 
     config = Config(
@@ -104,15 +158,107 @@ else:
         directed=True,
         physics=True,
         hierarchical=False,
-        nodeHighlightBehavior=True,
-        highlightColor="#f1fa8c",
-        collapsible=False,
     )
 
     if nodes:
         st.subheader("Interactive Graph")
-        st.write("Circles = markets, squares = news. Green edges = positive influence, red = negative.")
-        agraph(nodes=nodes, edges=edges_vis, config=config)
+
+        # ── Color-code legend ─────────────────────────────────────────
+        legend_html = "<div style='display:flex;flex-wrap:wrap;gap:24px;align-items:flex-start;margin-bottom:12px'>"
+
+        legend_html += "<div style='display:flex;flex-wrap:wrap;gap:8px;align-items:center'>"
+        legend_html += "<span style='font-weight:600;margin-right:4px'>Categories:</span>"
+        for cat, color in CATEGORY_COLORS.items():
+            legend_html += (
+                f"<span style='display:inline-flex;align-items:center;gap:4px'>"
+                f"<span style='width:12px;height:12px;border-radius:3px;background:{color};display:inline-block'></span>"
+                f"<span style='font-size:0.85rem'>{cat}</span></span>"
+            )
+        legend_html += "</div>"
+
+        legend_html += (
+            "<div style='display:flex;gap:8px;align-items:center'>"
+            "<span style='font-weight:600;margin-right:4px'>Nodes:</span>"
+            "<span style='display:inline-flex;align-items:center;gap:4px'>"
+            "<span style='width:12px;height:12px;border-radius:50%;background:#94a3b8;display:inline-block'></span>"
+            "<span style='font-size:0.85rem'>Market</span></span>"
+            "<span style='display:inline-flex;align-items:center;gap:4px'>"
+            "<span style='width:12px;height:12px;border-radius:1px;background:#94a3b8;display:inline-block'></span>"
+            "<span style='font-size:0.85rem'>News</span></span>"
+            "</div>"
+        )
+
+        legend_html += (
+            "<div style='display:flex;gap:8px;align-items:center'>"
+            "<span style='font-weight:600;margin-right:4px'>Edges:</span>"
+            "<span style='display:inline-flex;align-items:center;gap:4px'>"
+            "<span style='width:18px;height:3px;background:#22c55e;display:inline-block;border-radius:1px'></span>"
+            "<span style='font-size:0.85rem'>Positive</span></span>"
+            "<span style='display:inline-flex;align-items:center;gap:4px'>"
+            "<span style='width:18px;height:3px;background:#ef4444;display:inline-block;border-radius:1px'></span>"
+            "<span style='font-size:0.85rem'>Negative</span></span>"
+            "</div>"
+        )
+
+        legend_html += "</div>"
+        st.markdown(legend_html, unsafe_allow_html=True)
+
+        returned_node = agraph(nodes=nodes, edges=edges_vis, config=config)
+
+        # Handle selection change → rerun with updated dimming
+        if returned_node and returned_node != sel_id:
+            st.session_state.selected_graph_node = returned_node
+            st.rerun()
+
+        # ── 1-hop neighbor details on selection ───────────────────────
+        if sel_id:
+            node_lookup: dict[str, dict] = {}
+            for m in state["markets"]:
+                node_lookup[m["id"]] = {**m, "_type": "market"}
+            for n in state["news"]:
+                node_lookup[n["id"]] = {**n, "_type": "news"}
+
+            selected = node_lookup.get(sel_id)
+            if selected:
+                sel_label = selected.get("name") or selected.get("headline", sel_id)
+
+                hdr_col, btn_col = st.columns([5, 1])
+                hdr_col.markdown(f"#### Selected: {sel_label}")
+                if btn_col.button("Clear selection", use_container_width=True):
+                    st.session_state.selected_graph_node = None
+                    st.rerun()
+
+                neighbors: list[dict] = []
+                for e in state["edges"]:
+                    if e["source_id"] == sel_id:
+                        nbr = node_lookup.get(e["target_id"])
+                        if nbr:
+                            neighbors.append({
+                                "Relation": "→ influences",
+                                "Node": nbr.get("name") or nbr.get("headline", e["target_id"]),
+                                "Type": nbr["_type"].title(),
+                                "Category": nbr.get("category", ""),
+                                "Direction": "+" if e["direction"] > 0 else "−",
+                                "Strength": e["strength"],
+                                "Reason": e.get("reason", ""),
+                            })
+                    if e["target_id"] == sel_id:
+                        nbr = node_lookup.get(e["source_id"])
+                        if nbr:
+                            neighbors.append({
+                                "Relation": "← influenced by",
+                                "Node": nbr.get("name") or nbr.get("headline", e["source_id"]),
+                                "Type": nbr["_type"].title(),
+                                "Category": nbr.get("category", ""),
+                                "Direction": "+" if e["direction"] > 0 else "−",
+                                "Strength": e["strength"],
+                                "Reason": e.get("reason", ""),
+                            })
+
+                if neighbors:
+                    st.dataframe(neighbors, use_container_width=True, hide_index=True)
+                else:
+                    st.info("No edges connected to this node.")
     else:
         st.info("Add some markets and news first to see the graph.")
 

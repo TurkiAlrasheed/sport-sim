@@ -38,10 +38,11 @@ Dashboard table with per-market signals
 | `utils.py` | Persistence layer — `load_state`/`save_state`/`get_state`/`persist` for JSON I/O, `slugify` for ID generation, lookup helpers (`find_market`, `find_news`, `edges_targeting`, `edges_from`, `news_edges_for_market`, `market_edges_for_market`), CRUD helpers (`add_market`, `remove_market`, `add_news`, `remove_news`, `add_edge`, `remove_edge`), shared `CATEGORIES` list | Active |
 | `data/state.json` | Persistent storage — 14 seed markets, 5 seed news events, 37 dependency edges (30 market→market from original `PRESET_EVENTS`, 7 news→market) | Active |
 | `pages/1_Markets.py` | Streamlit page — expandable form to add markets (name, description, category, probability), auto-generates market→market edges via AI on add, dataframe listing all markets, expandable section to remove a market (cascades to delete its edges) | Active |
-| `pages/2_News.py` | Streamlit page — expandable form to add news (headline, category, date), auto-generates news→market edges via AI on add, dataframe listing all news, expandable section to remove a news event (cascades to delete its edges) | Active |
+| `pages/2_News.py` | Streamlit page — "Fetch latest headlines" button pulls top 20 from NewsAPI (past 24 hrs, deduplicates, auto-generates AI edges), expandable form to manually add news (headline, category, date), dataframe listing all news, expandable section to remove a news event (cascades to delete its edges) | Active |
 | `pages/3_Dependencies.py` | Streamlit page — interactive directed graph via `streamlit-agraph`, AI bulk regeneration buttons for news→market and market→market edges (GPT-4o-mini), manual form to add/remove edges | Active |
 | `edge_analysis.py` | AI edge generation — `generate_news_edges` (news→market), `generate_market_edges` (market→market), `generate_all_news_edges`, `generate_all_market_edges`; calls GPT-4o-mini with JSON structured output, validates target IDs, clamps strength/direction | Active |
-| `requirements.txt` | Python deps: `streamlit >=1.44,<2`, `pandas >=2.2,<3`, `streamlit-agraph >=0.0.45`, `openai >=1.0,<2`, `python-dotenv >=1.0,<2` | Active |
+| `news_api.py` | NewsAPI integration — `fetch_top_headlines` fetches top 20 US headlines from the past 24 hours via NewsAPI `/v2/top-headlines`, filters stale/removed articles, auto-infers category from keyword matching, returns dicts ready for `add_news` | Active |
+| `requirements.txt` | Python deps: `streamlit >=1.44,<2`, `pandas >=2.2,<3`, `requests >=2.32,<3`, `streamlit-agraph >=0.0.45`, `openai >=1.0,<2`, `python-dotenv >=1.0,<2` | Active |
 
 ## Data Model
 
@@ -132,7 +133,7 @@ streamlit run app.py
 ### Pages
 - **Dashboard** (`app.py`) — configure agent count / randomness / seed / threshold in sidebar, run simulations, view signal table, drill into individual markets
 - **Markets** (`pages/1_Markets.py`) — add/remove prediction markets with name, description, category, probability
-- **News** (`pages/2_News.py`) — add/remove news events with headline, category, date
+- **News** (`pages/2_News.py`) — fetch live headlines from NewsAPI, add/remove news events with headline, category, date
 - **Dependencies** (`pages/3_Dependencies.py`) — interactive graph visualization, add/remove edges between news↔markets and markets↔markets
 
 ### Seed Data
@@ -157,4 +158,4 @@ Ships with 14 prediction markets across 6 categories (macro, markets, crypto, co
 - Data persisted as JSON in `data/state.json`, loaded into `st.session_state` at startup
 - IDs are slugified from names (lowercase, alphanumeric + hyphens, max 64 chars)
 - Removing an entity cascades to remove all edges referencing it
-- No external API calls yet — everything is self-contained and deterministic given a seed
+- NewsAPI calls require `NEWSAPI_KEY` in `.env`; simulation remains deterministic given a seed

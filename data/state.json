@@ -101,34 +101,112 @@
   ],
   "news": [
     {
-      "id": "fed-dovish-signal",
-      "headline": "Fed signals dovish pivot at latest press conference",
-      "category": "macro",
-      "timestamp": "2026-04-10"
-    },
-    {
-      "id": "btc-etf-inflows",
-      "headline": "Bitcoin ETF sees record daily inflows of $1.2B",
-      "category": "crypto",
+      "id": "fury-vs-makhmudov-briton-calls-out-anthony-joshua-after-comeback",
+      "headline": "Fury vs Makhmudov: Briton calls out Anthony Joshua after comeback win - BBC",
+      "category": "markets",
       "timestamp": "2026-04-11"
     },
     {
-      "id": "new-tariff-package",
-      "headline": "New tariff package announced targeting Chinese tech imports",
+      "id": "appeals-court-rules-trump-s-white-house-ballroom-construction-ca",
+      "headline": "Appeals court rules Trump's White House ballroom construction can temporarily move forward - NBC News",
       "category": "policy",
-      "timestamp": "2026-04-09"
+      "timestamp": "2026-04-11"
     },
     {
-      "id": "tesla-price-cuts",
-      "headline": "Tesla announces major price cuts across all models",
-      "category": "company",
-      "timestamp": "2026-04-08"
-    },
-    {
-      "id": "oil-supply-disruption",
-      "headline": "Oil prices spike on Middle East supply disruption",
+      "id": "ufc-327-live-results-and-analysis-for-proch-zka-vs-ulberg-espn",
+      "headline": "UFC 327: Live results and analysis for Procházka vs. Ulberg - ESPN",
       "category": "markets",
-      "timestamp": "2026-04-07"
+      "timestamp": "2026-04-11"
+    },
+    {
+      "id": "2026-masters-live-updates-leaderboard-scores-results-highlights-",
+      "headline": "2026 Masters live updates: Leaderboard, scores, results, highlights and news from Round 3 - Golf Channel",
+      "category": "markets",
+      "timestamp": "2026-04-11"
+    },
+    {
+      "id": "dax-shepard-hated-eric-dane-at-first-says-they-almost-had-a-fist",
+      "headline": "Dax Shepard ‘Hated’ Eric Dane at First, Says They Almost Had a ‘Fist Fight’ Outside an AA Meeting: ‘This Had Been Simmering For a Long Time’ - Variety",
+      "category": "markets",
+      "timestamp": "2026-04-11"
+    },
+    {
+      "id": "box-office-milestone-super-mario-galaxy-soars-past-300m-in-u-s-a",
+      "headline": "Box Office Milestone: ‘Super Mario Galaxy’ Soars Past $300M in U.S. and $600M Globally - The Hollywood Reporter",
+      "category": "markets",
+      "timestamp": "2026-04-11"
+    },
+    {
+      "id": "hungarian-election-rivals-orb-n-and-magyar-make-final-push-for-v",
+      "headline": "Hungarian election rivals Orbán and Magyar make final push for votes on eve of poll - AP News",
+      "category": "policy",
+      "timestamp": "2026-04-11"
+    },
+    {
+      "id": "slashing-suspect-shot-by-police-after-injuring-3-at-grand-centra",
+      "headline": "Slashing suspect shot by police after injuring 3 at Grand Central subway station in New York - ABC News",
+      "category": "markets",
+      "timestamp": "2026-04-11"
+    },
+    {
+      "id": "john-nolan-dies-dark-knight-rises-person-of-interest-actor-was-8",
+      "headline": "John Nolan Dies: ‘Dark Knight Rises’ & ‘Person of Interest’ Actor Was 87 - Deadline",
+      "category": "markets",
+      "timestamp": "2026-04-11"
+    },
+    {
+      "id": "pope-leo-says-delusion-of-omnipotence-is-fueling-u-s-israeli-war",
+      "headline": "Pope Leo says 'delusion of omnipotence' is fueling U.S.-Israeli war in Iran - NPR",
+      "category": "markets",
+      "timestamp": "2026-04-11"
+    },
+    {
+      "id": "sabrina-carpenter-s-coachella-set-featured-sam-elliott-susan-sar",
+      "headline": "Sabrina Carpenter’s Coachella Set Featured Sam Elliott, Susan Sarandon & Will Ferrell Cameos - Deadline",
+      "category": "markets",
+      "timestamp": "2026-04-11"
+    },
+    {
+      "id": "u-s-naval-destroyers-have-crossed-the-strait-of-hormuz-centcom-s",
+      "headline": "U.S. naval destroyers have crossed the Strait of Hormuz, CENTCOM says - CBS News",
+      "category": "markets",
+      "timestamp": "2026-04-11"
+    },
+    {
+      "id": "sam-altman-responds-to-incendiary-new-yorker-article-after-attac",
+      "headline": "Sam Altman responds to ‘incendiary’ New Yorker article after attack on his home - TechCrunch",
+      "category": "markets",
+      "timestamp": "2026-04-11"
+    },
+    {
+      "id": "us-clearing-out-strait-of-hormuz-trump-claims-as-iran-threatens-",
+      "headline": "US clearing out Strait of Hormuz, Trump claims as Iran threatens to attack unauthorized ships - Yahoo",
+      "category": "markets",
+      "timestamp": "2026-04-11"
+    },
+    {
+      "id": "astronomers-find-evidence-for-three-subpopulations-of-merging-bl",
+      "headline": "Astronomers find evidence for three subpopulations of merging black holes - Phys.org",
+      "category": "markets",
+      "timestamp": "2026-04-11"
+    },
+    {
+      "id": "artemis-ii-splashdown-captures-nationwide-attention-npr",
+      "headline": "Artemis II splashdown captures nationwide attention - NPR",
+      "category": "markets",
+      "timestamp": "2026-04-11"
+    },
+    {
+      "id": "iphone-ultra-will-solve-two-key-problems-macrumors",
+      "headline": "'iPhone Ultra' Will Solve Two Key Problems - MacRumors",
+      "category": "markets",
+      "timestamp": "2026-04-11"
+    },
+    {
+      "id": "peru-holds-presidential-election-amid-a-decade-of-political-tumu",
+      "headline": "Peru holds presidential election amid a decade of political tumult - Al Jazeera",
+      "category": "policy",
+      "timestamp": "2026-04-11"
     }
   ],
   "edges": [
@@ -365,52 +443,44 @@
       "reason": "A surge in streaming platform subscribers can indicate a strong consumer economy, positively impacting earnings expectations for companies like Tesla."
     },
     {
-      "source_id": "fed-dovish-signal",
+      "source_id": "box-office-milestone-super-mario-galaxy-soars-past-300m-in-u-s-a",
       "source_type": "news",
-      "target_id": "fed-rate-cut",
+      "target_id": "sp500-above-6000",
       "direction": 1,
-      "strength": 0.8,
-      "reason": "The Fed's dovish pivot increases the likelihood of a rate cut at the upcoming FOMC meeting."
-    },
-    {
-      "source_id": "fed-dovish-signal",
-      "source_type": "news",
-      "target_id": "us-recession-2026",
-      "direction": -1,
       "strength": 0.6,
-      "reason": "A dovish Fed signal may reduce fears of an imminent recession, thus decreasing the probability of a recession by the end of 2026."
+      "reason": "The success of 'Super Mario Galaxy' at the box office may boost investor confidence, positively impacting the S&P 500."
     },
     {
-      "source_id": "btc-etf-inflows",
+      "source_id": "box-office-milestone-super-mario-galaxy-soars-past-300m-in-u-s-a",
       "source_type": "news",
-      "target_id": "btc-above-100k",
+      "target_id": "streaming-300m",
       "direction": 1,
-      "strength": 0.8,
-      "reason": "Record inflows into Bitcoin ETFs indicate increased demand for Bitcoin, raising the likelihood of its price exceeding $100,000."
+      "strength": 0.7,
+      "reason": "The box office success of 'Super Mario Galaxy' indicates strong consumer engagement, increasing the likelihood of a streaming platform exceeding 300 million subscribers."
     },
     {
-      "source_id": "new-tariff-package",
-      "source_type": "news",
-      "target_id": "china-tariffs",
-      "direction": 1,
-      "strength": 0.9,
-      "reason": "The announcement of a new tariff package directly confirms the likelihood of new tariffs being imposed on Chinese imports."
-    },
-    {
-      "source_id": "tesla-price-cuts",
+      "source_id": "box-office-milestone-super-mario-galaxy-soars-past-300m-in-u-s-a",
       "source_type": "news",
       "target_id": "tesla-q2-earnings",
       "direction": 1,
-      "strength": 0.8,
-      "reason": "Major price cuts are likely to boost sales and improve Tesla's earnings, increasing the probability of positive Q2 2026 earnings."
+      "strength": 0.5,
+      "reason": "Increased consumer spending from successful entertainment franchises like 'Super Mario Galaxy' may positively influence Tesla's sales and earnings."
     },
     {
-      "source_id": "oil-supply-disruption",
+      "source_id": "u-s-naval-destroyers-have-crossed-the-strait-of-hormuz-centcom-s",
       "source_type": "news",
       "target_id": "oil-above-90",
       "direction": 1,
-      "strength": 0.9,
-      "reason": "The spike in oil prices due to Middle East supply disruption significantly increases the likelihood of oil prices exceeding $90 per barrel."
+      "strength": 0.8,
+      "reason": "Increased military presence in the Strait of Hormuz raises concerns about oil supply disruptions, likely driving oil prices higher."
+    },
+    {
+      "source_id": "us-clearing-out-strait-of-hormuz-trump-claims-as-iran-threatens-",
+      "source_type": "news",
+      "target_id": "oil-above-90",
+      "direction": 1,
+      "strength": 0.8,
+      "reason": "Increased military tensions in the Strait of Hormuz typically lead to higher oil prices due to supply concerns."
     }
   ]
 }
